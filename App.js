@@ -1,3 +1,4 @@
+import "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, SafeAreaView } from "react-native";
 import WelcomeScreen from "./screens/WelcomeScreen";
@@ -7,24 +8,43 @@ import AddAdvertisementScreen from "./screens/AddAdvertisementScreen";
 import { Ionicons } from "@expo/vector-icons";
 import { SIZES } from "./constants";
 import AdvertisementDetailsScreen from "./screens/AdvertisementDetailsScreen";
-const Tab = createMaterialBottomTabNavigator();
+import { createStackNavigator } from "@react-navigation/stack";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import UserRatingsScreen from "./screens/UserRatingsScreen";
+
+// const Tab = createMaterialBottomTabNavigator();
+const Stack = createStackNavigator();
+const Drawer = createDrawerNavigator();
+
+function DrawerNavigator() {
+	return (
+		<Drawer.Navigator>
+			<Drawer.Screen name="Home" component={WelcomeScreen} />
+			<Drawer.Screen
+				name="Add new advertisement"
+				component={AddAdvertisementScreen}
+			/>
+		</Drawer.Navigator>
+	);
+}
 
 export default function App() {
 	return (
 		<>
 			<StatusBar style="auto" />
 			<NavigationContainer>
-				<Tab.Navigator>
-					<Tab.Screen
-						name="Home"
-						component={WelcomeScreen}
+				<Stack.Navigator>
+					<Stack.Screen
+						name="Drawer"
+						component={DrawerNavigator}
 						options={{
 							tabBarIcon: ({ color, size }) => (
 								<Ionicons name="home" color={color} size={SIZES.large} />
 							),
+							headerShown: false,
 						}}
 					/>
-					<Tab.Screen
+					<Stack.Screen
 						name="New add"
 						component={AddAdvertisementScreen}
 						options={{
@@ -33,8 +53,9 @@ export default function App() {
 							),
 						}}
 					/>
-					<Tab.Screen name="Details" component={AdvertisementDetailsScreen} />
-				</Tab.Navigator>
+					<Stack.Screen name="UserRatings" component={UserRatingsScreen} />
+					<Stack.Screen name="Details" component={AdvertisementDetailsScreen} />
+				</Stack.Navigator>
 			</NavigationContainer>
 		</>
 	);

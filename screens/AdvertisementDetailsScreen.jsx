@@ -6,15 +6,50 @@ import {
 	ScrollView,
 	TouchableOpacity,
 } from "react-native";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useRoute } from "@react-navigation/native";
 import { COLORS, SHADOWS, SIZES } from "../constants";
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
 
 const AdvertisementDetailsScreen = () => {
 	const route = useRoute();
+	const navigation = useNavigation();
+	const [numberOfLikesAndDislikes, setnumberOfLikesAndDislikes] = useState({});
 
 	const ad = route.params.ad;
+
+	const handleNavigateToRatings = () => {
+		navigation.navigate("UserRatings", {
+			user: ad.user,
+			numOfLikes: numberOfLikesAndDislikes,
+		});
+	};
+
+	useEffect(() => {
+		const fetchLikeAndDislikeNumbers = async () => {
+			const options = {
+				method: "GET",
+				url: `http://192.168.0.106:8080/api/v1/user/${parseInt(
+					ad.user.id
+				)}/likesNumber`,
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJha2lAZ21haWwuY29tIiwicm9sZXMiOlsiQURNSU4iXSwiZXhwIjoxNjgzODAzOTM5fQ.h-y3kHkS0yUBLSPSteTRWK2TVKjBBgtQ2eQfDc_V1GE`,
+				},
+			};
+			try {
+				const response = await axios.request(options);
+				setnumberOfLikesAndDislikes(response.data);
+			} catch (error) {
+				alert("Error!");
+				console.log(error);
+			}
+		};
+
+		fetchLikeAndDislikeNumbers();
+	}, []);
 
 	return (
 		<ScrollView style={styles.container}>
@@ -75,7 +110,10 @@ const AdvertisementDetailsScreen = () => {
 							/>
 							<Text style={styles.userInfoText}>{ad.user.city}</Text>
 						</View>
-						<View style={styles.userInfoItem}>
+						<TouchableOpacity
+							style={styles.userInfoItem}
+							onPress={handleNavigateToRatings}
+						>
 							<View style={styles.likesContainer}>
 								<Ionicons
 									name="thumbs-up"
@@ -83,7 +121,9 @@ const AdvertisementDetailsScreen = () => {
 									color="#555"
 									style={styles.likesIcon}
 								/>
-								<Text style={styles.likesText}>236</Text>
+								<Text style={styles.likesText}>
+									{numberOfLikesAndDislikes.likes}
+								</Text>
 							</View>
 							<View style={styles.dislikesContainer}>
 								<Ionicons
@@ -92,9 +132,11 @@ const AdvertisementDetailsScreen = () => {
 									color="#555"
 									style={styles.dislikesIcon}
 								/>
-								<Text style={styles.dislikesText}>12</Text>
+								<Text style={styles.dislikesText}>
+									{numberOfLikesAndDislikes.dislikes}
+								</Text>
 							</View>
-						</View>
+						</TouchableOpacity>
 						<TouchableOpacity style={styles.advertisementsLink}>
 							<Text style={styles.advertisementsLinkText}>
 								View all advertisements

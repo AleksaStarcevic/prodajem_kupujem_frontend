@@ -22,7 +22,7 @@ const WelcomeScreen = () => {
 		url: `http://192.168.0.106:8080/api/v1/common/categories`,
 		headers: {
 			"Content-Type": "application/json",
-			Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJha2lAZ21haWwuY29tIiwicm9sZXMiOlsiQURNSU4iXSwiZXhwIjoxNjgzNjc1NDk3fQ.o07AuP_CbZG4RCLYOk0aFmDqZgWwOL5fXE1fOKHYclE`,
+			Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJha2lAZ21haWwuY29tIiwicm9sZXMiOlsiQURNSU4iXSwiZXhwIjoxNjgzODAzOTM5fQ.h-y3kHkS0yUBLSPSteTRWK2TVKjBBgtQ2eQfDc_V1GE`,
 		},
 	};
 
@@ -40,7 +40,7 @@ const WelcomeScreen = () => {
 				url: `http://192.168.0.106:8080/api/v1/advertisements/category/${category}/search`,
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJha2lAZ21haWwuY29tIiwicm9sZXMiOlsiQURNSU4iXSwiZXhwIjoxNjgzNjc1NDk3fQ.o07AuP_CbZG4RCLYOk0aFmDqZgWwOL5fXE1fOKHYclE`,
+					Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJha2lAZ21haWwuY29tIiwicm9sZXMiOlsiQURNSU4iXSwiZXhwIjoxNjgzODAzOTM5fQ.h-y3kHkS0yUBLSPSteTRWK2TVKjBBgtQ2eQfDc_V1GE`,
 				},
 			};
 			try {
