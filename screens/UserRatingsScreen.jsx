@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS, SHADOWS, SIZES } from "../constants";
 import axios from "axios";
@@ -8,6 +8,7 @@ import UserRating from "../components/UserRating";
 
 const UserRatingsScreen = () => {
 	const route = useRoute();
+	const navigation = useNavigation();
 	const user = route.params.user;
 	const numOfLikes = route.params.numOfLikes;
 	const [ratedAds, setRatedAds] = useState([]);
@@ -16,7 +17,6 @@ const UserRatingsScreen = () => {
 	useEffect(() => {
 		const fetchRatedAds = async () => {
 			const search = isPositive ? "positive" : "negative";
-			console.log(search);
 
 			const options = {
 				method: "GET",
@@ -25,7 +25,7 @@ const UserRatingsScreen = () => {
 				)}/ratedAdvertisements?rate=${search}`,
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJha2lAZ21haWwuY29tIiwicm9sZXMiOlsiQURNSU4iXSwiZXhwIjoxNjgzODAzOTM5fQ.h-y3kHkS0yUBLSPSteTRWK2TVKjBBgtQ2eQfDc_V1GE`,
+					Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJha2lAZ21haWwuY29tIiwicm9sZXMiOlsiQURNSU4iXSwiZXhwIjoxNjgzOTMwOTk4fQ.wXrL4LC2LBG2hpOerozTjy0W-ko4qTgfHGrGql0CXJ8`,
 				},
 			};
 			try {
@@ -65,7 +65,7 @@ const UserRatingsScreen = () => {
 
 				<TouchableOpacity
 					style={styles.rateButton}
-					// onPress={() => navigation.navigate("RateUser")}
+					onPress={() => navigation.navigate("RateUser", { user })}
 				>
 					<Text style={styles.rateButtonText}>Rate User</Text>
 				</TouchableOpacity>

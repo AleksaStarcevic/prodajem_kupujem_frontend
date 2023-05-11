@@ -11,6 +11,8 @@ import AdvertisementDetailsScreen from "./screens/AdvertisementDetailsScreen";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import UserRatingsScreen from "./screens/UserRatingsScreen";
+import RateScreen from "./screens/RateScreen";
+import MyAdvertisementsScreen from "./screens/MyAdvertisementsScreen";
 
 // const Tab = createMaterialBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -23,6 +25,10 @@ function DrawerNavigator() {
 			<Drawer.Screen
 				name="Add new advertisement"
 				component={AddAdvertisementScreen}
+			/>
+			<Drawer.Screen
+				name="My advertisements"
+				component={MyAdvertisementsScreen}
 			/>
 		</Drawer.Navigator>
 	);
@@ -55,6 +61,17 @@ export default function App() {
 					/>
 					<Stack.Screen name="UserRatings" component={UserRatingsScreen} />
 					<Stack.Screen name="Details" component={AdvertisementDetailsScreen} />
+					<Stack.Screen name="RateUser" component={RateScreen} />
+					<Stack.Screen
+						name="DrawerMyAds"
+						component={DrawerNavigator}
+						options={{
+							tabBarIcon: ({ color, size }) => (
+								<Ionicons name="home" color={color} size={SIZES.large} />
+							),
+							headerShown: false,
+						}}
+					/>
 				</Stack.Navigator>
 			</NavigationContainer>
 		</>
