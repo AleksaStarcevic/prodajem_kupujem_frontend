@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS, SHADOWS, SIZES } from "../constants";
 import axios from "axios";
 import UserRating from "../components/UserRating";
-
+import { AuthContext } from "../context/auth_context";
 const UserRatingsScreen = () => {
 	const route = useRoute();
 	const navigation = useNavigation();
@@ -13,7 +13,7 @@ const UserRatingsScreen = () => {
 	const numOfLikes = route.params.numOfLikes;
 	const [ratedAds, setRatedAds] = useState([]);
 	const [isPositive, setIsPositive] = useState(true);
-
+	const authCtx = useContext(AuthContext);
 	useEffect(() => {
 		const fetchRatedAds = async () => {
 			const search = isPositive ? "positive" : "negative";
@@ -25,7 +25,7 @@ const UserRatingsScreen = () => {
 				)}/ratedAdvertisements?rate=${search}`,
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJha2lAZ21haWwuY29tIiwicm9sZXMiOlsiQURNSU4iXSwiZXhwIjoxNjgzOTMwOTk4fQ.wXrL4LC2LBG2hpOerozTjy0W-ko4qTgfHGrGql0CXJ8`,
+					Authorization: `Bearer ${authCtx.token}`,
 				},
 			};
 			try {

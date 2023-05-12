@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
 	View,
 	Text,
@@ -12,6 +12,7 @@ import { useRoute } from "@react-navigation/native";
 import { Picker } from "@react-native-picker/picker";
 import axios from "axios";
 import { COLORS, SHADOWS, SIZES } from "../constants";
+import { AuthContext } from "../context/auth_context";
 
 const RateScreen = () => {
 	const [isPositive, setIsPositive] = useState(true);
@@ -21,7 +22,7 @@ const RateScreen = () => {
 	const [selectedTitle, setSelectedTitle] = useState("");
 	const [selectedAd, setSelectedAd] = useState({});
 	const [feedBack, setFeedback] = useState("");
-
+	const authCtx = useContext(AuthContext);
 	const handlePositivePress = () => {
 		setIsPositive(true);
 	};
@@ -48,7 +49,7 @@ const RateScreen = () => {
 			}),
 			headers: {
 				"Content-Type": "application/json",
-				Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJha2lAZ21haWwuY29tIiwicm9sZXMiOlsiQURNSU4iXSwiZXhwIjoxNjgzOTMwOTk4fQ.wXrL4LC2LBG2hpOerozTjy0W-ko4qTgfHGrGql0CXJ8`,
+				Authorization: `Bearer ${authCtx.token}`,
 			},
 		};
 		try {
@@ -69,7 +70,7 @@ const RateScreen = () => {
 				)}/advertisements`,
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJha2lAZ21haWwuY29tIiwicm9sZXMiOlsiQURNSU4iXSwiZXhwIjoxNjgzOTMwOTk4fQ.wXrL4LC2LBG2hpOerozTjy0W-ko4qTgfHGrGql0CXJ8`,
+					Authorization: `Bearer ${authCtx.token}`,
 				},
 			};
 			try {

@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from "react";
+import { React, useEffect, useState, useContext } from "react";
 import {
 	View,
 	Text,
@@ -13,34 +13,41 @@ import { icons, COLORS, SIZES } from "../constants";
 import useFetch from "../hook/useFetch";
 import axios from "axios";
 import Advertisement from "../components/Advertisement";
+import { AuthContext } from "../context/auth_context";
+import { useNavigation } from "@react-navigation/native";
+
 const WelcomeScreen = () => {
-	const [activeJobType, setActiveJobType] = useState("Laptopovi");
+	const [activeJobType, setActiveJobType] = useState({
+		categoryName: "Laptopovi",
+		id: 1,
+	});
 	const [searchTerm, setSearchTerm] = useState("");
 	const [adsData, setAdsData] = useState([]);
+	const authCtx = useContext(AuthContext);
+	const navigation = useNavigation();
 	const options = {
 		method: "GET",
 		url: `http://192.168.0.101:8080/api/v1/common/categories`,
 		headers: {
 			"Content-Type": "application/json",
-			Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJha2lAZ21haWwuY29tIiwicm9sZXMiOlsiQURNSU4iXSwiZXhwIjoxNjgzOTMwOTk4fQ.wXrL4LC2LBG2hpOerozTjy0W-ko4qTgfHGrGql0CXJ8`,
+			Authorization: `Bearer ${authCtx.token}`,
 		},
 	};
 
 	const { data, isLoading, error } = useFetch(options);
 
-	const handleClick = () => {
-		console.log("aaaa");
+	const handleSearch = () => {
+		navigation.navigate("SearchScreen", { searchTerm });
 	};
 
 	useEffect(() => {
 		const fetchAds = async () => {
-			const category = "laptopovi";
 			const options2 = {
 				method: "GET",
-				url: `http://192.168.0.101:8080/api/v1/advertisements/category/${category}/search`,
+				url: `http://192.168.0.101:8080/api/v1/advertisements/category/${activeJobType.categoryName}/search`,
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJha2lAZ21haWwuY29tIiwicm9sZXMiOlsiQURNSU4iXSwiZXhwIjoxNjgzOTMwOTk4fQ.wXrL4LC2LBG2hpOerozTjy0W-ko4qTgfHGrGql0CXJ8`,
+					Authorization: `Bearer ${authCtx.token}`,
 				},
 			};
 			try {
@@ -48,17 +55,16 @@ const WelcomeScreen = () => {
 				setAdsData(response.data);
 			} catch (error) {
 				alert("Error!");
-				console.log(error);
 			}
 		};
 
 		fetchAds();
-	}, []);
+	}, [activeJobType]);
 	return (
 		<ScrollView showsVerticalScrollIndicator={false}>
 			<View style={{ flex: 1, padding: SIZES.medium }}>
 				<View style={styles.container}>
-					<Text style={styles.userName}>Hello AKI</Text>
+					{/* <Text style={styles.userName}>Hello User</Text> */}
 					<Text style={styles.welcomeMessage}>Buy and sell stuff.</Text>
 				</View>
 				<View style={styles.searchContainer}>
@@ -73,7 +79,7 @@ const WelcomeScreen = () => {
 					<TouchableOpacity
 						style={styles.searchBtn}
 						onPress={() => {
-							handleClick();
+							handleSearch();
 						}}
 					>
 						<Image

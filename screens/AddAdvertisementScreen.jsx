@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
 	StyleSheet,
 	View,
@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { Picker } from "@react-native-picker/picker";
+import { AuthContext } from "../context/auth_context";
 
 import axios from "axios";
 
@@ -22,14 +23,14 @@ const AddAdvertisementScreen = () => {
 	const [image, setImage] = useState(null);
 	const [adsCategories, setAdsCategories] = useState([]);
 	const [selectedCategory, setSelectedCategory] = useState({});
-
+	const authCtx = useContext(AuthContext);
 	const handleSubmit = async () => {
 		const options = {
 			method: "POST",
 			url: "http://192.168.0.101:8080/api/v1/advertisements",
 			headers: {
 				"Content-Type": "application/json",
-				Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJha2lAZ21haWwuY29tIiwicm9sZXMiOlsiQURNSU4iXSwiZXhwIjoxNjgzOTMwOTk4fQ.wXrL4LC2LBG2hpOerozTjy0W-ko4qTgfHGrGql0CXJ8`,
+				Authorization: `Bearer ${authCtx.token}`,
 			},
 			data: {
 				title: title,
@@ -99,7 +100,7 @@ const AddAdvertisementScreen = () => {
 				url: `http://192.168.0.101:8080/api/v1/common/categories`,
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJha2lAZ21haWwuY29tIiwicm9sZXMiOlsiQURNSU4iXSwiZXhwIjoxNjgzOTMwOTk4fQ.wXrL4LC2LBG2hpOerozTjy0W-ko4qTgfHGrGql0CXJ8`,
+					Authorization: `Bearer ${authCtx.token}`,
 				},
 			};
 			try {

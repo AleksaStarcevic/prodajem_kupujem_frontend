@@ -7,7 +7,6 @@ import { AuthContext } from "../context/auth_context";
 
 const LoginScreen = () => {
 	const [isAuthethicating, setIsAuthethicating] = useState(false);
-	const [jwtToken, setJwtToken] = useState({});
 	const authCtx = useContext(AuthContext);
 
 	const loginHandler = async userObject => {
@@ -33,8 +32,7 @@ const LoginScreen = () => {
 		};
 		try {
 			const response = await axios.request(options);
-			setJwtToken(response.data.access_token);
-			authCtx.authenticate(jwtToken);
+			authCtx.authenticate(response.data.access_token);
 			setIsAuthethicating(false);
 			ToastAndroid.show("Login successfull!", ToastAndroid.SHORT);
 		} catch (error) {

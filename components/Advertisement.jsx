@@ -6,15 +6,16 @@ import {
 	StyleSheet,
 	Alert,
 } from "react-native";
-import React from "react";
+import { React, useContext } from "react";
 import { COLORS, SHADOWS, SIZES } from "../constants";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
+import { AuthContext } from "../context/auth_context";
 import axios from "axios";
 const Advertisement = ({ ad, onChange }) => {
 	const navigation = useNavigation();
-
+	const authCtx = useContext(AuthContext);
 	const handleNavigate = () => {
 		navigation.navigate("Details", { ad });
 	};
@@ -24,7 +25,7 @@ const Advertisement = ({ ad, onChange }) => {
 			url: `http://192.168.0.101:8080/api/v1/advertisements/${ad.id}`,
 			headers: {
 				"Content-Type": "application/json",
-				Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJha2lAZ21haWwuY29tIiwicm9sZXMiOlsiQURNSU4iXSwiZXhwIjoxNjgzOTMwOTk4fQ.wXrL4LC2LBG2hpOerozTjy0W-ko4qTgfHGrGql0CXJ8`,
+				Authorization: `Bearer ${authCtx.token}`,
 			},
 		};
 		try {

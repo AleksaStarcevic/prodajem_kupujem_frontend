@@ -4,19 +4,18 @@ import { SIZES } from "../constants";
 import axios from "axios";
 import Advertisement from "../components/Advertisement";
 import { AuthContext } from "../context/auth_context";
-const MyAdvertisementsScreen = () => {
-	const [adsData, setAdsData] = useState([]);
-	const [childChange, setChildChange] = useState(false);
-	const authCtx = useContext(AuthContext);
-	const handleChildChange = () => {
-		setChildChange(prev => !prev);
-	};
+import { useRoute } from "@react-navigation/native";
 
+const SearchedAdsScreen = () => {
+	const [adsData, setAdsData] = useState([]);
+	const authCtx = useContext(AuthContext);
+	const route = useRoute();
+	const search = route.params.searchTerm;
 	useEffect(() => {
 		const fetchAds = async () => {
 			const options = {
 				method: "GET",
-				url: `http://192.168.0.101:8080/api/v1/my_account/advertisements`,
+				url: `http://192.168.0.101:8080/api/v1/advertisements/search?keywords=${search}`,
 				headers: {
 					"Content-Type": "application/json",
 					Authorization: `Bearer ${authCtx.token}`,
@@ -32,13 +31,13 @@ const MyAdvertisementsScreen = () => {
 		};
 
 		fetchAds();
-	}, [childChange]);
+	}, []);
 	return (
 		<ScrollView showsVerticalScrollIndicator={false}>
 			<View style={{ flex: 1, padding: SIZES.medium }}>
 				<View style={styles.cardsContainer}>
 					{adsData?.map(ad => (
-						<Advertisement onChange={handleChildChange} ad={ad} key={ad.id} />
+						<Advertisement ad={ad} key={ad.id} />
 					))}
 				</View>
 			</View>
@@ -46,6 +45,6 @@ const MyAdvertisementsScreen = () => {
 	);
 };
 
-export default MyAdvertisementsScreen;
+export default SearchedAdsScreen;
 
 const styles = StyleSheet.create({});

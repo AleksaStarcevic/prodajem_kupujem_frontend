@@ -6,18 +6,19 @@ import {
 	ScrollView,
 	TouchableOpacity,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useRoute } from "@react-navigation/native";
 import { COLORS, SHADOWS, SIZES } from "../constants";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
+import { AuthContext } from "../context/auth_context";
 
 const AdvertisementDetailsScreen = () => {
 	const route = useRoute();
 	const navigation = useNavigation();
 	const [numberOfLikesAndDislikes, setnumberOfLikesAndDislikes] = useState({});
-
+	const authCtx = useContext(AuthContext);
 	const ad = route.params.ad;
 
 	const handleNavigateToRatings = () => {
@@ -36,7 +37,7 @@ const AdvertisementDetailsScreen = () => {
 				)}/likesNumber`,
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJha2lAZ21haWwuY29tIiwicm9sZXMiOlsiQURNSU4iXSwiZXhwIjoxNjgzOTMwOTk4fQ.wXrL4LC2LBG2hpOerozTjy0W-ko4qTgfHGrGql0CXJ8`,
+					Authorization: `Bearer ${authCtx.token}`,
 				},
 			};
 			try {

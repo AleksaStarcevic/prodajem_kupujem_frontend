@@ -19,6 +19,7 @@ import AuthContextProvider, { AuthContext } from "./context/auth_context";
 import React, { useState, useContext } from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Button from "./components/Button";
+import SearchedAdsScreen from "./screens/SearchedAdsScreen";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -104,6 +105,7 @@ function AuthenticatedStack() {
 					headerShown: false,
 				}}
 			/>
+			<Stack.Screen name="SearchScreen" component={SearchedAdsScreen} />
 		</Stack.Navigator>
 	);
 }
