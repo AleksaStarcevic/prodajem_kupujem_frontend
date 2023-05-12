@@ -23,25 +23,6 @@ const AddAdvertisementScreen = () => {
 	const [adsCategories, setAdsCategories] = useState([]);
 	const [selectedCategory, setSelectedCategory] = useState({});
 
-	const handlePickImage = async () => {
-		const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-		if (status !== "granted") {
-			Alert.alert("Sorry, we need camera roll permissions to make this work!");
-			return;
-		}
-		const result = await ImagePicker.launchImageLibraryAsync({
-			mediaTypes: ImagePicker.MediaTypeOptions.All,
-			// allowsEditing: true,
-			aspect: [4, 3],
-			quality: 0.2,
-			base64: true,
-		});
-
-		if (!result.canceled) {
-			setImage(result.base64);
-		}
-	};
-
 	const handleSubmit = async () => {
 		const options = {
 			method: "POST",
@@ -59,11 +40,15 @@ const AddAdvertisementScreen = () => {
 				advertisementPromotion: 1,
 			},
 		};
-		console.log(options.data);
 
 		try {
 			const response = await axios(options);
 			Alert.alert("Success!", "Your advertisement has been added.");
+			setImage(null);
+			setTitle("");
+			setDescription("");
+			setPrice("");
+			setCategory("");
 		} catch (error) {
 			console.error(error.response.data);
 			Alert.alert("Error", "Sorry, something went wrong. Please try again.");
@@ -77,6 +62,34 @@ const AddAdvertisementScreen = () => {
 			id: selectedCat.id,
 			categoryName: selectedCat.categoryName,
 		});
+	};
+
+	const handleTakePicture = async () => {
+		const image = await ImagePicker.launchCameraAsync({
+			mediaTypes: ImagePicker.MediaTypeOptions.All,
+			aspect: [4, 3],
+			quality: 0.2,
+			base64: true,
+		});
+		setImage(image.base64);
+	};
+
+	const handlePickImage = async () => {
+		const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+		if (status !== "granted") {
+			Alert.alert("Sorry, we need camera roll permissions to make this work!");
+			return;
+		}
+		const result = await ImagePicker.launchImageLibraryAsync({
+			mediaTypes: ImagePicker.MediaTypeOptions.All,
+			aspect: [4, 3],
+			quality: 0.2,
+			base64: true,
+		});
+
+		if (!result.canceled) {
+			setImage(result.base64);
+		}
 	};
 
 	useEffect(() => {
@@ -139,13 +152,29 @@ const AddAdvertisementScreen = () => {
 					))}
 				</Picker>
 				{!image && (
+					<View style={styles.cameraButtonsContainer}>
+						<TouchableOpacity
+							style={styles.cameraButton}
+							onPress={handlePickImage}
+						>
+							<Text style={styles.cameraButtonText}>Choose image</Text>
+						</TouchableOpacity>
+						<TouchableOpacity
+							style={styles.cameraButton}
+							onPress={handleTakePicture}
+						>
+							<Text style={styles.cameraButtonText}>Take picture</Text>
+						</TouchableOpacity>
+					</View>
+				)}
+				{/* {!image && (
 					<TouchableOpacity
 						style={styles.imageButton}
 						onPress={handlePickImage}
 					>
 						<Text style={styles.imageButtonText}>Choose Image</Text>
 					</TouchableOpacity>
-				)}
+				)} */}
 				{image && (
 					<Image
 						source={{ uri: `data:image/png;base64,${image}` }}
@@ -219,6 +248,23 @@ const styles = StyleSheet.create({
 	},
 	submitButtonText: {
 		color: "#fff",
+		textAlign: "center",
+	},
+	cameraButtonsContainer: {
+		flexDirection: "row",
+		justifyContent: "space-between",
+		alignItems: "center",
+		marginTop: 20,
+	},
+	cameraButton: {
+		backgroundColor: "#4CAF50",
+		padding: 10,
+		borderRadius: 5,
+		marginHorizontal: 10,
+	},
+	cameraButtonText: {
+		color: "#FFF",
+		fontWeight: "bold",
 		textAlign: "center",
 	},
 });

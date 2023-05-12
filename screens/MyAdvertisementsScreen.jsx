@@ -6,6 +6,11 @@ import Advertisement from "../components/Advertisement";
 
 const MyAdvertisementsScreen = () => {
 	const [adsData, setAdsData] = useState([]);
+	const [childChange, setChildChange] = useState(false);
+
+	const handleChildChange = () => {
+		setChildChange(prev => !prev);
+	};
 
 	useEffect(() => {
 		const fetchAds = async () => {
@@ -27,13 +32,13 @@ const MyAdvertisementsScreen = () => {
 		};
 
 		fetchAds();
-	}, []);
+	}, [childChange]);
 	return (
 		<ScrollView showsVerticalScrollIndicator={false}>
 			<View style={{ flex: 1, padding: SIZES.medium }}>
 				<View style={styles.cardsContainer}>
 					{adsData?.map(ad => (
-						<Advertisement ad={ad} key={ad.id} />
+						<Advertisement onChange={handleChildChange} ad={ad} key={ad.id} />
 					))}
 				</View>
 			</View>

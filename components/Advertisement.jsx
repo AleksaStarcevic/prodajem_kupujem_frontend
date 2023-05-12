@@ -1,39 +1,77 @@
-import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
+import {
+	View,
+	Text,
+	TouchableOpacity,
+	Image,
+	StyleSheet,
+	Alert,
+} from "react-native";
 import React from "react";
 import { COLORS, SHADOWS, SIZES } from "../constants";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-
-const Advertisement = ({ ad }) => {
+import { MaterialIcons } from "@expo/vector-icons";
+import axios from "axios";
+const Advertisement = ({ ad, onChange }) => {
 	const navigation = useNavigation();
 
 	const handleNavigate = () => {
 		navigation.navigate("Details", { ad });
 	};
+	const handleDelete = async () => {
+		const options = {
+			method: "DELETE",
+			url: `http://192.168.0.106:8080/api/v1/advertisements/${ad.id}`,
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJha2lAZ21haWwuY29tIiwicm9sZXMiOlsiQURNSU4iXSwiZXhwIjoxNjgzOTMwOTk4fQ.wXrL4LC2LBG2hpOerozTjy0W-ko4qTgfHGrGql0CXJ8`,
+			},
+		};
+		try {
+			const response = await axios.request(options);
+			Alert.alert(
+				"Success!",
+				"Your advertisement has been successfully deleted!"
+			);
+			onChange(true);
+		} catch (error) {
+			alert("Error!");
+			console.log(error);
+		}
+	};
 
 	return (
-		<TouchableOpacity onPress={handleNavigate}>
-			<View style={styles.card}>
+		<View style={styles.card}>
+			<TouchableOpacity onPress={handleNavigate}>
 				<Image
 					source={{ uri: `data:image/jpeg;base64,${ad.picture}` }}
 					style={styles.image}
 				/>
-				<View style={styles.titleContainer}>
-					<Text style={styles.title}>{ad.title}</Text>
-					<View style={styles.locationContainer}>
-						<Ionicons
-							name="location-sharp"
-							color={COLORS.tertiary}
-							size={SIZES.large}
-						/>
-						<Text style={styles.location}>{ad.user.city}</Text>
-					</View>
-				</View>
-				<View style={styles.priceContainer}>
-					<Text style={styles.price}>{`${ad.price.toLocaleString()} din`}</Text>
+			</TouchableOpacity>
+			<View style={styles.titleContainer}>
+				<Text style={styles.title}>{ad.title}</Text>
+				<View style={styles.locationContainer}>
+					<Ionicons
+						name="location-sharp"
+						color={COLORS.tertiary}
+						size={SIZES.large}
+					/>
+					<Text style={styles.location}>{ad.user.city}</Text>
 				</View>
 			</View>
-		</TouchableOpacity>
+			<View style={styles.priceContainer}>
+				<Text style={styles.price}>{`${ad.price.toLocaleString()} din`}</Text>
+			</View>
+			{/* ako je user mail (id) == ad.id prikazi kantu */}
+			<TouchableOpacity>
+				<MaterialIcons
+					name="delete"
+					size={SIZES.large}
+					style={styles.garbageIcon}
+					onPress={handleDelete}
+				/>
+			</TouchableOpacity>
+		</View>
 	);
 };
 
@@ -91,45 +129,10 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		color: "#fff",
 	},
-	// container: {
-	// 	flex: 1,
-	// 	justifyContent: "space-between",
-	// 	alignItems: "center",
-	// 	flexDirection: "row",
-	// 	padding: SIZES.medium,
-	// 	borderRadius: SIZES.small,
-	// 	backgroundColor: "#FFF",
-	// 	...SHADOWS.medium,
-	// 	shadowColor: COLORS.white,
-	// },
-	// logoContainer: {
-	// 	width: 50,
-	// 	height: 50,
-	// 	backgroundColor: COLORS.white,
-	// 	borderRadius: SIZES.medium,
-	// 	justifyContent: "center",
-	// 	alignItems: "center",
-	// },
-	// logImage: {
-	// 	width: "100%",
-	// 	height: "80%",
-	// },
-	// textContainer: {
-	// 	flex: 1,
-	// 	marginHorizontal: SIZES.medium,
-	// },
-	// jobName: {
-	// 	fontSize: SIZES.large,
-	// 	color: COLORS.primary,
-	// },
-	// jobType: {
-	// 	fontSize: SIZES.small + 3,
-	// 	color: COLORS.lightWhite,
-	// 	marginTop: 3,
-	// 	textTransform: "capitalize",
-	// 	backgroundColor: COLORS.tertiary,
-	// 	width: 50,
-	// 	borderRadius: SIZES.medium,
-	// 	padding: 3,
-	// },
+	garbageIcon: {
+		position: "absolute",
+		bottom: 0,
+		right: 0,
+		padding: 10,
+	},
 });
