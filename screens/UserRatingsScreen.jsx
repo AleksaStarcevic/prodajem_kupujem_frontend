@@ -20,7 +20,7 @@ const UserRatingsScreen = () => {
 
 			const options = {
 				method: "GET",
-				url: `http://192.168.0.106:8080/api/v1/user/${parseInt(
+				url: `http://192.168.0.101:8080/api/v1/user/${parseInt(
 					user.id
 				)}/ratedAdvertisements?rate=${search}`,
 				headers: {

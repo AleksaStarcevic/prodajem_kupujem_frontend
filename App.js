@@ -15,15 +15,33 @@ import RateScreen from "./screens/RateScreen";
 import MyAdvertisementsScreen from "./screens/MyAdvertisementsScreen";
 import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
+import AuthContextProvider, { AuthContext } from "./context/auth_context";
+import React, { useState, useContext } from "react";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import Button from "./components/Button";
 
-// const Tab = createMaterialBottomTabNavigator();
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
 function DrawerNavigator() {
+	const authCtx = useContext(AuthContext);
+
 	return (
 		<Drawer.Navigator>
-			<Drawer.Screen name="Home" component={WelcomeScreen} />
+			<Drawer.Screen
+				name="Home"
+				component={WelcomeScreen}
+				options={{
+					headerRight: () => (
+						<TouchableOpacity
+							style={{ marginRight: 15 }}
+							onPress={() => authCtx.logout()}
+						>
+							<Text>Logout</Text>
+						</TouchableOpacity>
+					),
+				}}
+			/>
 			<Drawer.Screen
 				name="Add new advertisement"
 				component={AddAdvertisementScreen}
@@ -43,7 +61,6 @@ function AuthStack() {
 				// headerStyle: { backgroundColor: COLOR },
 				headerTintColor: "black",
 				headerTitle: "Enter your information",
-				// contentStyle: { backgroundColor: Colors.primary100 },
 			}}
 		>
 			<Stack.Screen name="Login" component={LoginScreen} />
@@ -92,9 +109,12 @@ function AuthenticatedStack() {
 }
 
 function Navigation() {
+	const authCtx = useContext(AuthContext);
+
 	return (
 		<NavigationContainer>
-			<AuthStack />
+			{!authCtx.isAuthenticated && <AuthStack />}
+			{authCtx.isAuthenticated && <AuthenticatedStack />}
 		</NavigationContainer>
 	);
 }
@@ -103,7 +123,9 @@ export default function App() {
 	return (
 		<>
 			<StatusBar style="auto" />
-			<Navigation />
+			<AuthContextProvider>
+				<Navigation />
+			</AuthContextProvider>
 		</>
 	);
 }

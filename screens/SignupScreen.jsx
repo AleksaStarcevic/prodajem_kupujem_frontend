@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, ToastAndroid } from "react-native";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import AuthContent from "../components/AuthContent";
 import LoadingOverlay from "../components/LoadingOverlay";
 import axios from "axios";
@@ -11,7 +11,7 @@ const SignupScreen = () => {
 		setIsAuthethicating(true);
 		const options = {
 			method: "POST",
-			url: `http://192.168.0.106:8080/api/v1/register`,
+			url: `http://192.168.0.101:8080/api/v1/register`,
 			headers: {
 				"Content-Type": "application/json",
 			},

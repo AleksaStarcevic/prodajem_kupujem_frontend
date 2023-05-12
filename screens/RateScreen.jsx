@@ -39,7 +39,7 @@ const RateScreen = () => {
 	const handleFormSubmit = async () => {
 		const options = {
 			method: "POST",
-			url: `http://192.168.0.106:8080/api/v1/user/${parseInt(
+			url: `http://192.168.0.101:8080/api/v1/user/${parseInt(
 				user.id
 			)}/advertisements/${parseInt(selectedAd.id)}/rating`,
 			data: JSON.stringify({
@@ -64,7 +64,7 @@ const RateScreen = () => {
 		const fetchUsersAds = async () => {
 			const options = {
 				method: "GET",
-				url: `http://192.168.0.106:8080/api/v1/user/${parseInt(
+				url: `http://192.168.0.101:8080/api/v1/user/${parseInt(
 					user.id
 				)}/advertisements`,
 				headers: {

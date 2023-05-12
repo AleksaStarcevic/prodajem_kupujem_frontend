@@ -26,7 +26,7 @@ const AddAdvertisementScreen = () => {
 	const handleSubmit = async () => {
 		const options = {
 			method: "POST",
-			url: "http://192.168.0.106:8080/api/v1/advertisements",
+			url: "http://192.168.0.101:8080/api/v1/advertisements",
 			headers: {
 				"Content-Type": "application/json",
 				Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJha2lAZ21haWwuY29tIiwicm9sZXMiOlsiQURNSU4iXSwiZXhwIjoxNjgzOTMwOTk4fQ.wXrL4LC2LBG2hpOerozTjy0W-ko4qTgfHGrGql0CXJ8`,
@@ -96,7 +96,7 @@ const AddAdvertisementScreen = () => {
 		const fetchCategories = async () => {
 			const options = {
 				method: "GET",
-				url: `http://192.168.0.106:8080/api/v1/common/categories`,
+				url: `http://192.168.0.101:8080/api/v1/common/categories`,
 				headers: {
 					"Content-Type": "application/json",
 					Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJha2lAZ21haWwuY29tIiwicm9sZXMiOlsiQURNSU4iXSwiZXhwIjoxNjgzOTMwOTk4fQ.wXrL4LC2LBG2hpOerozTjy0W-ko4qTgfHGrGql0CXJ8`,
