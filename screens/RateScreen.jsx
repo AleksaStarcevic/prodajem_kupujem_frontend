@@ -6,6 +6,7 @@ import {
 	TouchableOpacity,
 	Image,
 	StyleSheet,
+	ToastAndroid,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRoute } from "@react-navigation/native";
@@ -54,9 +55,9 @@ const RateScreen = () => {
 		};
 		try {
 			const response = await axios.request(options);
-			console.log(response);
+			ToastAndroid.show(`Successfully rated user`, ToastAndroid.SHORT);
 		} catch (error) {
-			alert("Error!");
+			ToastAndroid.show(`Error, ${error.response.data}`, ToastAndroid.SHORT);
 			console.log(error.response.data);
 		}
 	};
@@ -77,8 +78,10 @@ const RateScreen = () => {
 				const response = await axios.request(options);
 				setUserAdvertisements(response.data);
 			} catch (error) {
-				alert("Error!");
-				console.log(error);
+				ToastAndroid.show(
+					error.response ? error.response : "Error",
+					ToastAndroid.SHORT
+				);
 			}
 		};
 
@@ -91,7 +94,7 @@ const RateScreen = () => {
 		<View style={styles.container}>
 			<View style={styles.userContainer}>
 				<View style={styles.userInfo}>
-					<Text style={styles.username}>{user.name}</Text>
+					<Text style={styles.username}>Rating for user: {user.name}</Text>
 					<Picker
 						style={styles.titlePicker}
 						selectedValue={selectedTitle}
@@ -155,7 +158,8 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: "#fff",
-		padding: 20,
+		paddingHorizontal: 20,
+		paddingVertical: 10,
 	},
 	userContainer: {
 		flexDirection: "row",
@@ -175,26 +179,30 @@ const styles = StyleSheet.create({
 	},
 	userInfo: {
 		flex: 1,
+		justifyContent: "center",
 	},
 	username: {
 		fontSize: 18,
 		fontWeight: "bold",
 		marginBottom: 5,
+		color: "#333",
 	},
 	adTitle: {
 		fontSize: 16,
+		color: "#666",
 	},
 	formContainer: {
 		flex: 1,
 	},
 	label: {
 		fontSize: 16,
-		marginBottom: 5,
+		marginBottom: 12,
+		color: "#333",
 	},
 	ratingContainer: {
 		flexDirection: "row",
 		alignItems: "center",
-		marginBottom: 10,
+		marginBottom: 20,
 	},
 	thumbButton: {
 		padding: 10,
@@ -218,10 +226,11 @@ const styles = StyleSheet.create({
 		padding: 10,
 		marginBottom: 20,
 		maxHeight: 200,
+		color: "#333",
 	},
 	submitButton: {
-		backgroundColor: "#3f51b5",
-		paddingVertical: 10,
+		backgroundColor: COLORS.primary,
+		paddingVertical: 15,
 		paddingHorizontal: 20,
 		borderRadius: 5,
 		marginTop: 20,
@@ -230,6 +239,7 @@ const styles = StyleSheet.create({
 	submitButtonText: {
 		color: "#fff",
 		fontSize: 18,
+		fontWeight: "bold",
 	},
 });
 

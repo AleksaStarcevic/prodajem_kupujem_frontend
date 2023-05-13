@@ -78,7 +78,7 @@ function AuthContent({ isLogin, onAuthenticate }) {
 			/>
 			<View style={styles.buttons}>
 				<Button onPress={switchAuthModeHandler}>
-					{isLogin ? "Create a new user" : "Log in"}
+					{isLogin ? "Sign up" : "Log in"}
 				</Button>
 			</View>
 		</View>
@@ -93,14 +93,17 @@ const styles = StyleSheet.create({
 		marginHorizontal: 32,
 		padding: 16,
 		borderRadius: 8,
-		backgroundColor: COLORS.gray2,
+		backgroundColor: "#fff",
 		elevation: 2,
 		shadowColor: "black",
 		shadowOffset: { width: 1, height: 1 },
-		shadowOpacity: 0.35,
+		shadowOpacity: 0.25,
 		shadowRadius: 4,
 	},
 	buttons: {
-		marginTop: 8,
+		marginTop: 16,
+		flexDirection: "row",
+		justifyContent: "space-between",
+		alignItems: "center",
 	},
 });

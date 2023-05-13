@@ -61,7 +61,9 @@ const AdvertisementDetailsScreen = () => {
 			<View style={styles.content}>
 				<Text style={styles.title}>{ad.title}</Text>
 				<View style={styles.details}>
-					<Text style={styles.category}>{ad.advertisementCategory}</Text>
+					<Text style={styles.category}>
+						Category: {ad.advertisementCategory}
+					</Text>
 					<Text style={styles.price}>{`${ad.price.toLocaleString()} din`}</Text>
 				</View>
 				<Text style={styles.description}>{ad.description}</Text>
@@ -138,11 +140,11 @@ const AdvertisementDetailsScreen = () => {
 								</Text>
 							</View>
 						</TouchableOpacity>
-						<TouchableOpacity style={styles.advertisementsLink}>
+						{/* <TouchableOpacity style={styles.advertisementsLink}>
 							<Text style={styles.advertisementsLinkText}>
 								View all advertisements
 							</Text>
-						</TouchableOpacity>
+						</TouchableOpacity> */}
 					</View>
 				</View>
 			</View>

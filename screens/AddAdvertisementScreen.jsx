@@ -8,12 +8,14 @@ import {
 	Image,
 	Platform,
 	Alert,
+	ToastAndroid,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { Picker } from "@react-native-picker/picker";
 import { AuthContext } from "../context/auth_context";
 
 import axios from "axios";
+import { COLORS } from "../constants";
 
 const AddAdvertisementScreen = () => {
 	const [title, setTitle] = useState("");
@@ -44,7 +46,10 @@ const AddAdvertisementScreen = () => {
 
 		try {
 			const response = await axios(options);
-			Alert.alert("Success!", "Your advertisement has been added.");
+			ToastAndroid.show(
+				"Your advertisement has been added.",
+				ToastAndroid.SHORT
+			);
 			setImage(null);
 			setTitle("");
 			setDescription("");
@@ -52,7 +57,7 @@ const AddAdvertisementScreen = () => {
 			setCategory("");
 		} catch (error) {
 			console.error(error.response.data);
-			Alert.alert("Error", "Sorry, something went wrong. Please try again.");
+			ToastAndroid.show(`Error, ${error.response.data}`, ToastAndroid.SHORT);
 		}
 	};
 
@@ -117,7 +122,6 @@ const AddAdvertisementScreen = () => {
 
 	return (
 		<View style={styles.container}>
-			<Text style={styles.title}>Add New Advertisement</Text>
 			<View style={styles.formContainer}>
 				<TextInput
 					style={styles.input}
@@ -195,13 +199,16 @@ export default AddAdvertisementScreen;
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: "#fff",
-		padding: 20,
+		backgroundColor: "#f5f5f5",
+		paddingHorizontal: 30,
+		paddingTop: 60,
+		paddingBottom: 20,
 	},
 	title: {
 		fontSize: 24,
 		fontWeight: "bold",
 		marginBottom: 20,
+		color: "#333",
 	},
 	formContainer: {
 		flex: 1,
@@ -210,46 +217,58 @@ const styles = StyleSheet.create({
 	},
 	input: {
 		width: "100%",
-		height: 40,
-		borderColor: "gray",
+		height: 50,
+		borderColor: "#bbb",
 		borderWidth: 1,
-		borderRadius: 5,
-		padding: 10,
-		marginBottom: 10,
+		borderRadius: 10,
+		paddingHorizontal: 15,
+		marginBottom: 20,
+		fontSize: 16,
+		color: "#444",
 	},
 	picker: {
 		width: "100%",
-		height: 40,
-		borderColor: "gray",
+		height: 50,
+		borderColor: "#bbb",
 		borderWidth: 1,
-		borderRadius: 5,
-		marginBottom: 10,
+		borderRadius: 10,
+		marginBottom: 20,
+		fontSize: 16,
+		color: "#444",
+		paddingHorizontal: 15,
 	},
 	imageButton: {
 		backgroundColor: "#2196F3",
-		padding: 10,
-		borderRadius: 5,
-		marginBottom: 10,
+		paddingVertical: 15,
+		paddingHorizontal: 20,
+		borderRadius: 10,
+		marginBottom: 20,
 	},
 	imageButtonText: {
 		color: "#fff",
 		textAlign: "center",
+		fontSize: 16,
+		fontWeight: "bold",
 	},
 	imagePreview: {
 		width: "100%",
 		height: 200,
 		resizeMode: "contain",
-		marginBottom: 10,
+		marginBottom: 20,
+		borderRadius: 10,
 	},
 	submitButton: {
-		backgroundColor: "#4CAF50",
-		padding: 10,
-		borderRadius: 5,
-		marginTop: 10,
+		backgroundColor: COLORS.tertiary,
+		paddingVertical: 15,
+		paddingHorizontal: 20,
+		borderRadius: 10,
+		marginTop: 20,
 	},
 	submitButtonText: {
 		color: "#fff",
 		textAlign: "center",
+		fontSize: 16,
+		fontWeight: "bold",
 	},
 	cameraButtonsContainer: {
 		flexDirection: "row",
@@ -258,14 +277,16 @@ const styles = StyleSheet.create({
 		marginTop: 20,
 	},
 	cameraButton: {
-		backgroundColor: "#4CAF50",
-		padding: 10,
-		borderRadius: 5,
-		marginHorizontal: 10,
+		backgroundColor: COLORS.tertiary,
+		paddingVertical: 15,
+		paddingHorizontal: 20,
+		borderRadius: 10,
+		marginHorizontal: 5,
 	},
 	cameraButtonText: {
 		color: "#FFF",
 		fontWeight: "bold",
 		textAlign: "center",
+		fontSize: 16,
 	},
 });

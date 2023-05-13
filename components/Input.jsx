@@ -33,20 +33,22 @@ const styles = StyleSheet.create({
 		marginVertical: 8,
 	},
 	label: {
-		color: "white",
+		color: "#999",
 		marginBottom: 4,
+		fontWeight: "500",
 	},
 	labelInvalid: {
 		color: "red",
 	},
 	input: {
-		paddingVertical: 8,
-		paddingHorizontal: 6,
-		backgroundColor: COLORS.white,
-		borderRadius: 4,
+		paddingVertical: 12,
+		paddingHorizontal: 16,
+		backgroundColor: "#f4f4f4",
+		borderRadius: 8,
 		fontSize: 16,
+		color: "#333",
 	},
 	inputInvalid: {
-		backgroundColor: "red",
+		backgroundColor: "#ffd5d5",
 	},
 });

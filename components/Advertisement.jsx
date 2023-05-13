@@ -19,6 +19,7 @@ const Advertisement = ({ ad, onChange }) => {
 	const handleNavigate = () => {
 		navigation.navigate("Details", { ad });
 	};
+
 	const handleDelete = async () => {
 		const options = {
 			method: "DELETE",
@@ -63,15 +64,16 @@ const Advertisement = ({ ad, onChange }) => {
 			<View style={styles.priceContainer}>
 				<Text style={styles.price}>{`${ad.price.toLocaleString()} din`}</Text>
 			</View>
-			{/* ako je user mail (id) == ad.id prikazi kantu */}
-			<TouchableOpacity>
-				<MaterialIcons
-					name="delete"
-					size={SIZES.large}
-					style={styles.garbageIcon}
-					onPress={handleDelete}
-				/>
-			</TouchableOpacity>
+			{authCtx.email === ad.user.email && (
+				<TouchableOpacity>
+					<MaterialIcons
+						name="delete"
+						size={SIZES.large}
+						style={styles.garbageIcon}
+						onPress={handleDelete}
+					/>
+				</TouchableOpacity>
+			)}
 		</View>
 	);
 };

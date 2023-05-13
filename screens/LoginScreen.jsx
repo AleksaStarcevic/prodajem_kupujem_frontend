@@ -32,7 +32,7 @@ const LoginScreen = () => {
 		};
 		try {
 			const response = await axios.request(options);
-			authCtx.authenticate(response.data.access_token);
+			authCtx.authenticate(response.data.access_token, response.data.email);
 			setIsAuthethicating(false);
 			ToastAndroid.show("Login successfull!", ToastAndroid.SHORT);
 		} catch (error) {
