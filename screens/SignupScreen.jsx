@@ -3,20 +3,16 @@ import React, { useContext, useState } from "react";
 import AuthContent from "../components/AuthContent";
 import LoadingOverlay from "../components/LoadingOverlay";
 import axios from "axios";
+import { baseUrl, getApiOptions } from "../config/apiConfig";
 
 const SignupScreen = () => {
 	const [isAuthethicating, setIsAuthethicating] = useState(false);
 
 	const signUpHandler = async userObject => {
 		setIsAuthethicating(true);
-		const options = {
-			method: "POST",
-			url: `http://192.168.0.107:8080/api/v1/register`,
-			headers: {
-				"Content-Type": "application/json",
-			},
-			data: userObject,
-		};
+		let options = getApiOptions(false, "POST", userObject);
+		options.url = `${baseUrl}/register`;
+		options.headers = { "Content-Type": "application/json" };
 		try {
 			const response = await axios.request(options);
 			setIsAuthethicating(false);

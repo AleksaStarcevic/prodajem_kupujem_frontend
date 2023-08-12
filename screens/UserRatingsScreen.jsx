@@ -6,6 +6,7 @@ import { COLORS, SHADOWS, SIZES } from "../constants";
 import axios from "axios";
 import UserRating from "../components/UserRating";
 import { AuthContext } from "../context/auth_context";
+import { baseUrl, getApiOptions } from "../config/apiConfig";
 const UserRatingsScreen = () => {
 	const route = useRoute();
 	const navigation = useNavigation();
@@ -17,17 +18,10 @@ const UserRatingsScreen = () => {
 	useEffect(() => {
 		const fetchRatedAds = async () => {
 			const search = isPositive ? "positive" : "negative";
-
-			const options = {
-				method: "GET",
-				url: `http://192.168.0.107:8080/api/v1/user/${parseInt(
-					user.id
-				)}/ratedAdvertisements?rate=${search}`,
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${authCtx.token}`,
-				},
-			};
+			let options = getApiOptions(authCtx.token, "GET", false);
+			options.url = `${baseUrl}/user/${parseInt(
+				user.id
+			)}/ratedAdvertisements?rate=${search}`;
 			try {
 				const response = await axios.request(options);
 				setRatedAds(response.data);

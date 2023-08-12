@@ -4,6 +4,7 @@ import AuthContent from "../components/AuthContent";
 import LoadingOverlay from "../components/LoadingOverlay";
 import axios from "axios";
 import { AuthContext } from "../context/auth_context";
+import { baseUrlLogin, getApiOptions } from "../config/apiConfig";
 
 const LoginScreen = () => {
 	const [isAuthethicating, setIsAuthethicating] = useState(false);
@@ -22,14 +23,9 @@ const LoginScreen = () => {
 			.join("&");
 
 		setIsAuthethicating(true);
-		const options = {
-			method: "POST",
-			url: `http://192.168.0.107:8080/login`,
-			headers: {
-				"Content-Type": "application/x-www-form-urlencoded",
-			},
-			data: formBody,
-		};
+		let options = getApiOptions(false, "POST", formBody);
+		options.url = `${baseUrlLogin}/login`;
+		console.log(options);
 		try {
 			const response = await axios.request(options);
 			authCtx.authenticate(response.data.access_token, response.data.email);

@@ -15,6 +15,8 @@ import { AuthContext } from "../context/auth_context";
 import axios from "axios";
 import { useFavorites } from "../context/favourites_context";
 import { Button } from "react-native-paper";
+import { baseUrl, getApiOptions } from "../config/apiConfig";
+
 const Advertisement = ({ ad, onChange }) => {
 	const navigation = useNavigation();
 	const authCtx = useContext(AuthContext);
@@ -28,14 +30,8 @@ const Advertisement = ({ ad, onChange }) => {
 	// Ovo se cuva u kontekstu
 	const handleToggleFavorite = async () => {
 		const followUnfollow = isFavorite ? "unfollow" : "follow";
-		const options = {
-			method: "PATCH",
-			url: `http://192.168.0.107:8080/api/v1/advertisements/${ad.id}/${followUnfollow}`,
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${authCtx.token}`,
-			},
-		};
+		let options = getApiOptions(authCtx.token, "PATCH", false);
+		options.url = `${baseUrl}/advertisements/${ad.id}/${followUnfollow}`;
 		try {
 			await axios.request(options);
 			toggleFavorite(ad.id);

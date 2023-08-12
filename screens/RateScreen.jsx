@@ -14,6 +14,7 @@ import { Picker } from "@react-native-picker/picker";
 import axios from "axios";
 import { COLORS, SHADOWS, SIZES } from "../constants";
 import { AuthContext } from "../context/auth_context";
+import { baseUrl, getApiOptions } from "../config/apiConfig";
 
 const RateScreen = () => {
 	const [isPositive, setIsPositive] = useState(true);
@@ -39,20 +40,13 @@ const RateScreen = () => {
 	};
 
 	const handleFormSubmit = async () => {
-		const options = {
-			method: "POST",
-			url: `http://192.168.0.107:8080/api/v1/user/${parseInt(
-				user.id
-			)}/advertisements/${parseInt(selectedAd.id)}/rating`,
-			data: JSON.stringify({
-				description: feedBack,
-				satisfied: isPositive,
-			}),
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${authCtx.token}`,
-			},
-		};
+		let options = getApiOptions(authCtx.token, "POST", {
+			description: feedBack,
+			satisfied: isPositive,
+		});
+		options.url = `${baseUrl}/user/${parseInt(
+			user.id
+		)}/advertisements/${parseInt(selectedAd.id)}/rating`;
 		try {
 			const response = await axios.request(options);
 			ToastAndroid.show(`Successfully rated user`, ToastAndroid.SHORT);
@@ -64,16 +58,8 @@ const RateScreen = () => {
 
 	useEffect(() => {
 		const fetchUsersAds = async () => {
-			const options = {
-				method: "GET",
-				url: `http://192.168.0.107:8080/api/v1/user/${parseInt(
-					user.id
-				)}/advertisements`,
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${authCtx.token}`,
-				},
-			};
+			let options = getApiOptions(authCtx.token, "GET", false);
+			options.url = `${baseUrl}/user/${parseInt(user.id)}/advertisements`;
 			try {
 				const response = await axios.request(options);
 				setUserAdvertisements(response.data);

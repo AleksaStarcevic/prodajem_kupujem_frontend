@@ -16,6 +16,7 @@ import { AuthContext } from "../context/auth_context";
 
 import axios from "axios";
 import { COLORS } from "../constants";
+import { baseUrl, getApiOptions } from "../config/apiConfig";
 
 const AddAdvertisementScreen = () => {
 	const [title, setTitle] = useState("");
@@ -27,23 +28,15 @@ const AddAdvertisementScreen = () => {
 	const [selectedCategory, setSelectedCategory] = useState({});
 	const authCtx = useContext(AuthContext);
 	const handleSubmit = async () => {
-		const options = {
-			method: "POST",
-			url: "http://192.168.0.107:8080/api/v1/advertisements",
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${authCtx.token}`,
-			},
-			data: {
-				title: title,
-				description: description,
-				picture: image,
-				price: price,
-				advertisementCategory: selectedCategory.id,
-				advertisementPromotion: 1,
-			},
-		};
-
+		let options = getApiOptions(authCtx.token, "POST", {
+			title: title,
+			description: description,
+			picture: image,
+			price: price,
+			advertisementCategory: selectedCategory.id,
+			advertisementPromotion: 1,
+		});
+		options.url = `${baseUrl}/advertisements/`;
 		try {
 			const response = await axios(options);
 			ToastAndroid.show(
@@ -100,14 +93,8 @@ const AddAdvertisementScreen = () => {
 
 	useEffect(() => {
 		const fetchCategories = async () => {
-			const options = {
-				method: "GET",
-				url: `http://192.168.0.107:8080/api/v1/common/categories`,
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${authCtx.token}`,
-				},
-			};
+			let options = getApiOptions(authCtx.token, "GET", false);
+			options.url = `${baseUrl}/common/categories`;
 			try {
 				const response = await axios.request(options);
 				setAdsCategories(response.data);

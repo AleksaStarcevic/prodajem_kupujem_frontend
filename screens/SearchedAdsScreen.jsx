@@ -5,6 +5,7 @@ import axios from "axios";
 import Advertisement from "../components/Advertisement";
 import { AuthContext } from "../context/auth_context";
 import { useRoute } from "@react-navigation/native";
+import { baseUrl, getApiOptions } from "../config/apiConfig";
 
 const SearchedAdsScreen = () => {
 	const [adsData, setAdsData] = useState([]);
@@ -13,14 +14,8 @@ const SearchedAdsScreen = () => {
 	const search = route.params.searchTerm;
 	useEffect(() => {
 		const fetchAds = async () => {
-			const options = {
-				method: "GET",
-				url: `http://192.168.0.107:8080/api/v1/advertisements/search?keywords=${search}`,
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${authCtx.token}`,
-				},
-			};
+			let options = getApiOptions(authCtx.token, "GET", false);
+			options.url = `${baseUrl}/advertisements/search?keywords=${search}`;
 			try {
 				const response = await axios.request(options);
 				setAdsData(response.data);

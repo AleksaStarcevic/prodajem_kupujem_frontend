@@ -4,6 +4,7 @@ import { SIZES } from "../constants";
 import axios from "axios";
 import Advertisement from "../components/Advertisement";
 import { AuthContext } from "../context/auth_context";
+import { baseUrl, getApiOptions } from "../config/apiConfig";
 const MyAdvertisementsScreen = () => {
 	const [adsData, setAdsData] = useState([]);
 	const [childChange, setChildChange] = useState(false);
@@ -14,14 +15,8 @@ const MyAdvertisementsScreen = () => {
 
 	useEffect(() => {
 		const fetchAds = async () => {
-			const options = {
-				method: "GET",
-				url: `http://192.168.0.107:8080/api/v1/my_account/advertisements`,
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${authCtx.token}`,
-				},
-			};
+			let options = getApiOptions(authCtx.token, "GET", false);
+			options.url = `${baseUrl}/my_account/advertisements`;
 			try {
 				const response = await axios.request(options);
 				setAdsData(response.data);

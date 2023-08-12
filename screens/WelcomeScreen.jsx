@@ -15,6 +15,7 @@ import axios from "axios";
 import Advertisement from "../components/Advertisement";
 import { AuthContext } from "../context/auth_context";
 import { useNavigation } from "@react-navigation/native";
+import { baseUrl, getApiOptions } from "../config/apiConfig";
 
 const WelcomeScreen = () => {
 	const [activeJobType, setActiveJobType] = useState({
@@ -25,14 +26,9 @@ const WelcomeScreen = () => {
 	const [adsData, setAdsData] = useState([]);
 	const authCtx = useContext(AuthContext);
 	const navigation = useNavigation();
-	const options = {
-		method: "GET",
-		url: `http://192.168.0.107:8080/api/v1/common/categories`,
-		headers: {
-			"Content-Type": "application/json",
-			Authorization: `Bearer ${authCtx.token}`,
-		},
-	};
+
+	let options = getApiOptions(authCtx.token, "GET", false);
+	options.url = `${baseUrl}/common/categories`;
 
 	const { data, isLoading, error } = useFetch(options);
 	const handleSearch = () => {
@@ -41,14 +37,8 @@ const WelcomeScreen = () => {
 
 	useEffect(() => {
 		const fetchAds = async () => {
-			const options2 = {
-				method: "GET",
-				url: `http://192.168.0.107:8080/api/v1/advertisements/category/${activeJobType.categoryName}/search`,
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${authCtx.token}`,
-				},
-			};
+			let options2 = getApiOptions(authCtx.token, "GET", false);
+			options2.url = `${baseUrl}/advertisements/category/${activeJobType.categoryName}/search`;
 			try {
 				const response = await axios.request(options2);
 				console.log(adsData);

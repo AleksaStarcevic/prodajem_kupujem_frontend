@@ -13,6 +13,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import { AuthContext } from "../context/auth_context";
+import { baseUrl, getApiOptions } from "../config/apiConfig";
 
 const AdvertisementDetailsScreen = () => {
 	const route = useRoute();
@@ -30,16 +31,8 @@ const AdvertisementDetailsScreen = () => {
 
 	useEffect(() => {
 		const fetchLikeAndDislikeNumbers = async () => {
-			const options = {
-				method: "GET",
-				url: `http://192.168.0.107:8080/api/v1/user/${parseInt(
-					ad.user.id
-				)}/likesNumber`,
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${authCtx.token}`,
-				},
-			};
+			let options = getApiOptions(authCtx.token, "GET", false);
+			options.url = `${baseUrl}/user/${parseInt(ad.user.id)}/likesNumber`;
 			try {
 				const response = await axios.request(options);
 				setnumberOfLikesAndDislikes(response.data);
