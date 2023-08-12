@@ -16,7 +16,7 @@ const MyAdvertisementsScreen = () => {
 		const fetchAds = async () => {
 			const options = {
 				method: "GET",
-				url: `http://192.168.0.101:8080/api/v1/my_account/advertisements`,
+				url: `http://192.168.0.107:8080/api/v1/my_account/advertisements`,
 				headers: {
 					"Content-Type": "application/json",
 					Authorization: `Bearer ${authCtx.token}`,

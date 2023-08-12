@@ -1,3 +1,5 @@
+import AuthContextProvider, { AuthContext } from "./context/auth_context";
+import { FavoritesProvider } from "./context/favourites_context";
 import "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, SafeAreaView } from "react-native";
@@ -15,7 +17,6 @@ import RateScreen from "./screens/RateScreen";
 import MyAdvertisementsScreen from "./screens/MyAdvertisementsScreen";
 import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
-import AuthContextProvider, { AuthContext } from "./context/auth_context";
 import React, { useState, useContext } from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Button from "./components/Button";
@@ -41,15 +42,49 @@ function DrawerNavigator() {
 							<Text>Logout</Text>
 						</TouchableOpacity>
 					),
+					drawerIcon: () => <Ionicons name="home" size={24} color="black" />,
 				}}
 			/>
 			<Drawer.Screen
-				name="Add new advertisement"
+				name="New advertisement"
 				component={AddAdvertisementScreen}
+				options={{
+					drawerIcon: () => (
+						<Ionicons name="add-circle" size={24} color="black" />
+					),
+				}}
 			/>
 			<Drawer.Screen
-				name="My advertisements"
+				name="Favourites"
 				component={MyAdvertisementsScreen}
+				options={{
+					drawerIcon: () => <Ionicons name="heart" size={24} color="black" />,
+				}}
+			/>
+			<Drawer.Screen
+				name="Ratings"
+				component={MyAdvertisementsScreen}
+				options={{
+					drawerIcon: () => (
+						<Ionicons name="thumbs-up" size={24} color="black" />
+					),
+				}}
+			/>
+			<Drawer.Screen
+				name="My account"
+				component={MyAdvertisementsScreen}
+				options={{
+					drawerIcon: () => (
+						<Ionicons name="person-circle-sharp" size={24} color="black" />
+					),
+				}}
+			/>
+			<Drawer.Screen
+				name="Log out"
+				component={MyAdvertisementsScreen}
+				options={{
+					drawerIcon: () => <Ionicons name="log-out" size={24} color="black" />,
+				}}
 			/>
 		</Drawer.Navigator>
 	);
@@ -126,7 +161,9 @@ export default function App() {
 		<>
 			<StatusBar style="auto" />
 			<AuthContextProvider>
-				<Navigation />
+				<FavoritesProvider>
+					<Navigation />
+				</FavoritesProvider>
 			</AuthContextProvider>
 		</>
 	);

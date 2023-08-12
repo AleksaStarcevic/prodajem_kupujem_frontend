@@ -34,7 +34,8 @@ function AuthContent({ isLogin, onAuthenticate }) {
 		email = email.trim();
 		password = password.trim();
 		confirmPassword = confirmPassword.trim();
-
+		console.log(password);
+		console.log(confirmPassword);
 		const passwordsAreEqual = password === confirmPassword;
 		const emailIsValid = emailRegex.test(email);
 		const passwordIsValid = passwordRegex.test(password);

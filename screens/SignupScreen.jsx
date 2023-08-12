@@ -11,7 +11,7 @@ const SignupScreen = () => {
 		setIsAuthethicating(true);
 		const options = {
 			method: "POST",
-			url: `http://192.168.0.101:8080/api/v1/register`,
+			url: `http://192.168.0.107:8080/api/v1/register`,
 			headers: {
 				"Content-Type": "application/json",
 			},

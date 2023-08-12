@@ -20,7 +20,7 @@ const UserRatingsScreen = () => {
 
 			const options = {
 				method: "GET",
-				url: `http://192.168.0.101:8080/api/v1/user/${parseInt(
+				url: `http://192.168.0.107:8080/api/v1/user/${parseInt(
 					user.id
 				)}/ratedAdvertisements?rate=${search}`,
 				headers: {
@@ -39,7 +39,8 @@ const UserRatingsScreen = () => {
 
 		fetchRatedAds();
 	}, [isPositive]);
-
+	console.log(user);
+	console.log(authCtx.email);
 	return (
 		<View style={styles.container}>
 			<View style={styles.userInfo}>
@@ -62,13 +63,14 @@ const UserRatingsScreen = () => {
 					/>
 					<Text style={styles.userCity}>{user.city}</Text>
 				</View>
-
-				<TouchableOpacity
-					style={styles.rateButton}
-					onPress={() => navigation.navigate("RateUser", { user })}
-				>
-					<Text style={styles.rateButtonText}>Rate User</Text>
-				</TouchableOpacity>
+				{user.email !== authCtx.email && (
+					<TouchableOpacity
+						style={styles.rateButton}
+						onPress={() => navigation.navigate("RateUser", { user })}
+					>
+						<Text style={styles.rateButtonText}>Rate User</Text>
+					</TouchableOpacity>
+				)}
 			</View>
 			<View style={styles.ratingContainer}>
 				<TouchableOpacity

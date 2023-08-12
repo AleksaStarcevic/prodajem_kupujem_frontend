@@ -6,41 +6,65 @@ import {
 	StyleSheet,
 	Alert,
 } from "react-native";
-import { React, useContext } from "react";
+import { React, useContext, useState } from "react";
 import { COLORS, SHADOWS, SIZES } from "../constants";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { AuthContext } from "../context/auth_context";
 import axios from "axios";
+import { useFavorites } from "../context/favourites_context";
+import { Button } from "react-native-paper";
 const Advertisement = ({ ad, onChange }) => {
 	const navigation = useNavigation();
 	const authCtx = useContext(AuthContext);
+	const { favorites, toggleFavorite } = useFavorites();
+	const isFavorite = favorites.includes(ad.id);
+
 	const handleNavigate = () => {
 		navigation.navigate("Details", { ad });
 	};
 
-	const handleDelete = async () => {
+	// Ovo se cuva u kontekstu
+	const handleToggleFavorite = async () => {
+		const followUnfollow = isFavorite ? "unfollow" : "follow";
 		const options = {
-			method: "DELETE",
-			url: `http://192.168.0.101:8080/api/v1/advertisements/${ad.id}`,
+			method: "PATCH",
+			url: `http://192.168.0.107:8080/api/v1/advertisements/${ad.id}/${followUnfollow}`,
 			headers: {
 				"Content-Type": "application/json",
 				Authorization: `Bearer ${authCtx.token}`,
 			},
 		};
 		try {
-			const response = await axios.request(options);
-			Alert.alert(
-				"Success!",
-				"Your advertisement has been successfully deleted!"
-			);
-			onChange(true);
+			await axios.request(options);
+			toggleFavorite(ad.id);
 		} catch (error) {
-			alert("Error!");
-			console.log(error);
+			console.error("Error toggling favorite:", error);
 		}
 	};
+
+	// const handleDelete = async () => {
+	// 	const options = {
+	// 		method: "DELETE",
+	// 		url: `http://192.168.0.107:8080/api/v1/advertisements/${ad.id}`,
+	// 		headers: {
+	// 			"Content-Type": "application/json",
+	// 			Authorization: `Bearer ${authCtx.token}`,
+	// 		},
+	// 	};
+	// 	try {
+	// 		const response = await axios.request(options);
+	// 		Alert.alert(
+	// 			"Success!",
+	// 			"Your advertisement has been successfully deleted!"
+	// 		);
+	// 		onChange(true);
+	// 	} catch (error) {
+	// 		alert("Error!");
+	// 		console.log(error);
+	// 	}
+	// };
 
 	return (
 		<View style={styles.card}>
@@ -64,15 +88,13 @@ const Advertisement = ({ ad, onChange }) => {
 			<View style={styles.priceContainer}>
 				<Text style={styles.price}>{`${ad.price.toLocaleString()} din`}</Text>
 			</View>
-			{authCtx.email === ad.user.email && (
-				<TouchableOpacity>
-					<MaterialIcons
-						name="delete"
-						size={SIZES.large}
-						style={styles.garbageIcon}
-						onPress={handleDelete}
-					/>
-				</TouchableOpacity>
+			{authCtx.email !== ad.user.email && (
+				<MaterialIcons
+					onPress={handleToggleFavorite}
+					name={isFavorite ? "favorite" : "favorite-border"}
+					size={SIZES.xLarge}
+					style={styles.garbageIcon}
+				/>
 			)}
 		</View>
 	);

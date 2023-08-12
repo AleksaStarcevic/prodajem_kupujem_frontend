@@ -29,7 +29,7 @@ const AddAdvertisementScreen = () => {
 	const handleSubmit = async () => {
 		const options = {
 			method: "POST",
-			url: "http://192.168.0.101:8080/api/v1/advertisements",
+			url: "http://192.168.0.107:8080/api/v1/advertisements",
 			headers: {
 				"Content-Type": "application/json",
 				Authorization: `Bearer ${authCtx.token}`,
@@ -102,7 +102,7 @@ const AddAdvertisementScreen = () => {
 		const fetchCategories = async () => {
 			const options = {
 				method: "GET",
-				url: `http://192.168.0.101:8080/api/v1/common/categories`,
+				url: `http://192.168.0.107:8080/api/v1/common/categories`,
 				headers: {
 					"Content-Type": "application/json",
 					Authorization: `Bearer ${authCtx.token}`,

@@ -32,7 +32,7 @@ const AdvertisementDetailsScreen = () => {
 		const fetchLikeAndDislikeNumbers = async () => {
 			const options = {
 				method: "GET",
-				url: `http://192.168.0.101:8080/api/v1/user/${parseInt(
+				url: `http://192.168.0.107:8080/api/v1/user/${parseInt(
 					ad.user.id
 				)}/likesNumber`,
 				headers: {

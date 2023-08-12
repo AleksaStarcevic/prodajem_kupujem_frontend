@@ -15,7 +15,7 @@ const SearchedAdsScreen = () => {
 		const fetchAds = async () => {
 			const options = {
 				method: "GET",
-				url: `http://192.168.0.101:8080/api/v1/advertisements/search?keywords=${search}`,
+				url: `http://192.168.0.107:8080/api/v1/advertisements/search?keywords=${search}`,
 				headers: {
 					"Content-Type": "application/json",
 					Authorization: `Bearer ${authCtx.token}`,

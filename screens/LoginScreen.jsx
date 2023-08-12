@@ -24,7 +24,7 @@ const LoginScreen = () => {
 		setIsAuthethicating(true);
 		const options = {
 			method: "POST",
-			url: `http://192.168.0.101:8080/login`,
+			url: `http://192.168.0.107:8080/login`,
 			headers: {
 				"Content-Type": "application/x-www-form-urlencoded",
 			},

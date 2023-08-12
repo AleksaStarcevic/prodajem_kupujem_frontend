@@ -27,7 +27,7 @@ const WelcomeScreen = () => {
 	const navigation = useNavigation();
 	const options = {
 		method: "GET",
-		url: `http://192.168.0.101:8080/api/v1/common/categories`,
+		url: `http://192.168.0.107:8080/api/v1/common/categories`,
 		headers: {
 			"Content-Type": "application/json",
 			Authorization: `Bearer ${authCtx.token}`,
@@ -35,7 +35,6 @@ const WelcomeScreen = () => {
 	};
 
 	const { data, isLoading, error } = useFetch(options);
-
 	const handleSearch = () => {
 		navigation.navigate("SearchScreen", { searchTerm });
 	};
@@ -44,7 +43,7 @@ const WelcomeScreen = () => {
 		const fetchAds = async () => {
 			const options2 = {
 				method: "GET",
-				url: `http://192.168.0.101:8080/api/v1/advertisements/category/${activeJobType.categoryName}/search`,
+				url: `http://192.168.0.107:8080/api/v1/advertisements/category/${activeJobType.categoryName}/search`,
 				headers: {
 					"Content-Type": "application/json",
 					Authorization: `Bearer ${authCtx.token}`,
@@ -52,6 +51,7 @@ const WelcomeScreen = () => {
 			};
 			try {
 				const response = await axios.request(options2);
+				console.log(adsData);
 				setAdsData(response.data);
 			} catch (error) {
 				alert("Error!");
