@@ -21,6 +21,10 @@ import React, { useState, useContext } from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Button from "./components/Button";
 import SearchedAdsScreen from "./screens/SearchedAdsScreen";
+import MyFollowingsScreen from "./screens/MyFollowingsScreen";
+import MyRatingsScreen from "./screens/MyRatingsScreen";
+import LogoutScreen from "./screens/LogoutScreen";
+import EditProfileScreen from "./screens/EditProfileScreen";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -34,54 +38,69 @@ function DrawerNavigator() {
 				name="Home"
 				component={WelcomeScreen}
 				options={{
-					headerRight: () => (
-						<TouchableOpacity
-							style={{ marginRight: 15 }}
-							onPress={() => authCtx.logout()}
-						>
-							<Text>Logout</Text>
-						</TouchableOpacity>
-					),
+					// headerRight: () => (
+					// 	<TouchableOpacity
+					// 		style={{ marginRight: 15 }}
+					// 		onPress={() => authCtx.logout()}
+					// 	>
+					// 		<Text>Logout</Text>
+					// 	</TouchableOpacity>
+					// ),
 					drawerIcon: () => <Ionicons name="home" size={24} color="black" />,
+					headerTitleAlign: "center",
 				}}
 			/>
 			<Drawer.Screen
-				name="New advertisement"
+				name="Add advertisement"
 				component={AddAdvertisementScreen}
 				options={{
 					drawerIcon: () => (
 						<Ionicons name="add-circle" size={24} color="black" />
 					),
+					headerTitleAlign: "center",
+				}}
+			/>
+			<Drawer.Screen
+				name="My advertisements"
+				component={MyAdvertisementsScreen}
+				options={{
+					drawerIcon: () => (
+						<Ionicons name="document" size={24} color="black" />
+					),
+					headerTitleAlign: "center",
 				}}
 			/>
 			<Drawer.Screen
 				name="Favourites"
-				component={MyAdvertisementsScreen}
+				component={MyFollowingsScreen}
 				options={{
 					drawerIcon: () => <Ionicons name="heart" size={24} color="black" />,
+					headerTitleAlign: "center",
 				}}
 			/>
 			<Drawer.Screen
 				name="Ratings"
-				component={MyAdvertisementsScreen}
+				component={MyRatingsScreen}
 				options={{
 					drawerIcon: () => (
 						<Ionicons name="thumbs-up" size={24} color="black" />
 					),
+					headerTitleAlign: "center",
 				}}
 			/>
 			<Drawer.Screen
 				name="My account"
-				component={MyAdvertisementsScreen}
+				component={EditProfileScreen}
 				options={{
 					drawerIcon: () => (
 						<Ionicons name="person-circle-sharp" size={24} color="black" />
 					),
+					headerTitleAlign: "center",
 				}}
 			/>
 			<Drawer.Screen
 				name="Log out"
-				component={MyAdvertisementsScreen}
+				component={LogoutScreen}
 				options={{
 					drawerIcon: () => <Ionicons name="log-out" size={24} color="black" />,
 				}}
@@ -97,6 +116,7 @@ function AuthStack() {
 				// headerStyle: { backgroundColor: COLOR },
 				headerTintColor: "black",
 				headerTitle: "Enter your information",
+				headerTitleAlign: "center",
 			}}
 		>
 			<Stack.Screen name="Login" component={LoginScreen} />
@@ -127,9 +147,9 @@ function AuthenticatedStack() {
 					),
 				}}
 			/>
-			<Stack.Screen name="UserRatings" component={UserRatingsScreen} />
+			<Stack.Screen name="User Ratings" component={UserRatingsScreen} />
 			<Stack.Screen name="Details" component={AdvertisementDetailsScreen} />
-			<Stack.Screen name="RateUser" component={RateScreen} />
+			<Stack.Screen name="Rate User" component={RateScreen} />
 			<Stack.Screen
 				name="DrawerMyAds"
 				component={DrawerNavigator}
@@ -140,7 +160,7 @@ function AuthenticatedStack() {
 					headerShown: false,
 				}}
 			/>
-			<Stack.Screen name="SearchScreen" component={SearchedAdsScreen} />
+			<Stack.Screen name="Search" component={SearchedAdsScreen} />
 		</Stack.Navigator>
 	);
 }
@@ -175,5 +195,8 @@ const styles = StyleSheet.create({
 		backgroundColor: "#fff",
 		alignItems: "center",
 		justifyContent: "center",
+	},
+	BarTheme: {
+		backgroundColor: "#1F2937",
 	},
 });

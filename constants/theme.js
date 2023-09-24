@@ -1,13 +1,23 @@
 const COLORS = {
+	background: "#111827",
+	textLight: "#F9FAFB",
+	textDark: "#D1D5DB",
+	primaryAccent: "#60A5FA",
+	secondaryAccent1: "#34D399",
+	secondaryAccent2: "#F472B6",
+	secondaryAccent3: "#F59E0B",
+
 	primary: "#312651",
-	secondary: "#444262",
+	secondary: "#444262", // nice
 	tertiary: "#FF7754",
 
 	gray: "#83829A",
 	gray2: "#C1C0C8",
+	gray3: "#f4f4f4", // nice
 
 	white: "#F3F4F8",
 	lightWhite: "#FAFAFC",
+	blue: "#1877F2",
 };
 
 const SIZES = {

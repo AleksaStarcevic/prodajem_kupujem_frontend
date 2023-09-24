@@ -30,6 +30,7 @@ const Advertisement = ({ ad, onChange }) => {
 	// Ovo se cuva u kontekstu
 	const handleToggleFavorite = async () => {
 		const followUnfollow = isFavorite ? "unfollow" : "follow";
+		console.log(followUnfollow);
 		let options = getApiOptions(authCtx.token, "PATCH", false);
 		options.url = `${baseUrl}/advertisements/${ad.id}/${followUnfollow}`;
 		try {
@@ -75,14 +76,14 @@ const Advertisement = ({ ad, onChange }) => {
 				<View style={styles.locationContainer}>
 					<Ionicons
 						name="location-sharp"
-						color={COLORS.tertiary}
+						color={COLORS.blue}
 						size={SIZES.large}
 					/>
 					<Text style={styles.location}>{ad.user.city}</Text>
 				</View>
 			</View>
 			<View style={styles.priceContainer}>
-				<Text style={styles.price}>{`${ad.price.toLocaleString()} din`}</Text>
+				<Text style={styles.price}>{`${ad.price.toLocaleString()} $`}</Text>
 			</View>
 			{authCtx.email !== ad.user.email && (
 				<MaterialIcons
@@ -139,7 +140,7 @@ const styles = StyleSheet.create({
 		marginLeft: 5,
 	},
 	priceContainer: {
-		backgroundColor: COLORS.tertiary,
+		backgroundColor: COLORS.blue,
 		borderRadius: 20,
 		alignSelf: "flex-start",
 		margin: 10,

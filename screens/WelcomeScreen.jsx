@@ -19,7 +19,7 @@ import { baseUrl, getApiOptions } from "../config/apiConfig";
 
 const WelcomeScreen = () => {
 	const [activeJobType, setActiveJobType] = useState({
-		categoryName: "Laptopovi",
+		categoryName: "Laptops",
 		id: 1,
 	});
 	const [searchTerm, setSearchTerm] = useState("");
@@ -32,7 +32,7 @@ const WelcomeScreen = () => {
 
 	const { data, isLoading, error } = useFetch(options);
 	const handleSearch = () => {
-		navigation.navigate("SearchScreen", { searchTerm });
+		navigation.navigate("Search", { searchTerm });
 	};
 
 	useEffect(() => {
@@ -41,7 +41,6 @@ const WelcomeScreen = () => {
 			options2.url = `${baseUrl}/advertisements/category/${activeJobType.categoryName}/search`;
 			try {
 				const response = await axios.request(options2);
-				console.log(adsData);
 				setAdsData(response.data);
 			} catch (error) {
 				alert("Error!");
@@ -52,10 +51,16 @@ const WelcomeScreen = () => {
 	}, [activeJobType]);
 	return (
 		<ScrollView showsVerticalScrollIndicator={false}>
-			<View style={{ flex: 1, padding: SIZES.medium }}>
+			<View
+				style={{
+					flex: 1,
+					padding: SIZES.medium,
+					backgroundColor: "#fff",
+				}}
+			>
 				<View style={styles.container}>
 					{/* <Text style={styles.userName}>Hello User</Text> */}
-					<Text style={styles.welcomeMessage}>Buy and sell stuff.</Text>
+					<Text style={styles.welcomeMessage}>Buy and sell products.</Text>
 				</View>
 				<View style={styles.searchContainer}>
 					<View style={styles.searchWrapper}>
@@ -151,7 +156,7 @@ const styles = StyleSheet.create({
 	searchBtn: {
 		width: 50,
 		height: "100%",
-		backgroundColor: COLORS.tertiary,
+		backgroundColor: COLORS.blue,
 		borderRadius: SIZES.medium,
 		justifyContent: "center",
 		alignItems: "center",
@@ -170,10 +175,10 @@ const styles = StyleSheet.create({
 		paddingHorizontal: SIZES.small,
 		borderRadius: SIZES.medium,
 		borderWidth: 1,
-		borderColor: activeJobType === item ? COLORS.secondary : COLORS.gray2,
+		borderColor: activeJobType === item ? COLORS.blue : COLORS.gray2,
 	}),
 	tabText: (activeJobType, item) => ({
-		color: activeJobType === item ? COLORS.secondary : COLORS.gray2,
+		color: activeJobType === item ? COLORS.blue : COLORS.gray2,
 	}),
 	cardsContainer: {
 		marginTop: SIZES.medium,

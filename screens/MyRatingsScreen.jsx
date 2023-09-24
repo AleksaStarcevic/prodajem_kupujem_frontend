@@ -10,18 +10,15 @@ import { baseUrl, getApiOptions } from "../config/apiConfig";
 const UserRatingsScreen = () => {
 	const route = useRoute();
 	const navigation = useNavigation();
-	const user = route.params.user;
-	const numOfLikes = route.params.numOfLikes;
 	const [ratedAds, setRatedAds] = useState([]);
 	const [isPositive, setIsPositive] = useState(true);
+	const [likesNumber, setLikesNumber] = useState({});
 	const authCtx = useContext(AuthContext);
 	useEffect(() => {
 		const fetchRatedAds = async () => {
 			const search = isPositive ? "positive" : "negative";
 			let options = getApiOptions(authCtx.token, "GET", false);
-			options.url = `${baseUrl}/user/${parseInt(
-				user.id
-			)}/ratedAdvertisements?rate=${search}`;
+			options.url = `${baseUrl}/my_account/ratedAdvertisements?rate=${search}`;
 			try {
 				const response = await axios.request(options);
 				setRatedAds(response.data);
@@ -31,80 +28,62 @@ const UserRatingsScreen = () => {
 			}
 		};
 
+		const fetchNumberOfLikes = async () => {
+			let options = getApiOptions(authCtx.token, "GET", false);
+			options.url = `${baseUrl}/my_account/ratedAdvertisements/likesNumber`;
+			try {
+				const response = await axios.request(options);
+				setLikesNumber(response.data);
+			} catch (error) {
+				alert("Error!");
+				console.log(error);
+			}
+		};
 		fetchRatedAds();
+		fetchNumberOfLikes();
 	}, [isPositive]);
-	console.log(user);
-	console.log(authCtx.email);
 	return (
 		<View style={styles.container}>
-			<View style={styles.userInfo}>
-				<Text style={styles.username}>Seller: {user.name}</Text>
-				<View style={styles.userInfoItem}>
-					<Ionicons
-						name="phone-portrait"
-						size={18}
-						color="#555"
-						style={styles.userInfoIcon}
-					/>
-					<Text style={styles.userPhone}>{user.phone}</Text>
-				</View>
-				<View style={styles.userInfoItem}>
-					<Ionicons
-						name="mail"
-						size={24}
-						color="#555"
-						style={styles.userInfoIcon}
-					/>
-					<Text style={styles.userCity}>{user.email}</Text>
-				</View>
-				<View style={styles.userInfoItem}>
-					<Ionicons
-						name="location-sharp"
-						size={24}
-						color="#555"
-						style={styles.userInfoIcon}
-					/>
-					<Text style={styles.userCity}>{user.city}</Text>
-				</View>
-				{user.email !== authCtx.email && (
-					<TouchableOpacity
-						style={styles.rateButton}
-						onPress={() => navigation.navigate("Rate User", { user })}
-					>
-						<Text style={styles.rateButtonText}>Rate User</Text>
-					</TouchableOpacity>
-				)}
-			</View>
 			<View style={styles.ratingContainer}>
-				<TouchableOpacity
-					style={[styles.likeContainer, isPositive ? styles.activeIcon : null]}
-					onPress={() => setIsPositive(true)}
-				>
-					<Ionicons
-						name="thumbs-up"
-						size={24}
-						color={isPositive ? "green" : "#555"}
-					/>
-					<Text style={isPositive ? styles.activeText : styles.likeText}>
-						{numOfLikes.likes}
+				<View style={styles.textContainer}>
+					<Text style={styles.textAboveButtons}>
+						Ratings given to you by users:
 					</Text>
-				</TouchableOpacity>
-				<TouchableOpacity
-					style={[
-						styles.dislikeContainer,
-						!isPositive ? styles.activeIcon : null,
-					]}
-					onPress={() => setIsPositive(false)}
-				>
-					<Ionicons
-						name="thumbs-down"
-						size={24}
-						color={!isPositive ? "red" : "#555"}
-					/>
-					<Text style={isPositive ? styles.dislikeText : styles.activeText}>
-						{numOfLikes.dislikes}
-					</Text>
-				</TouchableOpacity>
+				</View>
+				<View style={styles.buttonsContainer}>
+					<TouchableOpacity
+						style={[
+							styles.likeContainer,
+							isPositive ? styles.activeIcon : null,
+						]}
+						onPress={() => setIsPositive(true)}
+					>
+						<Ionicons
+							name="thumbs-up"
+							size={24}
+							color={isPositive ? "green" : "#555"}
+						/>
+						<Text style={isPositive ? styles.activeText : styles.likeText}>
+							{likesNumber.likes}
+						</Text>
+					</TouchableOpacity>
+					<TouchableOpacity
+						style={[
+							styles.dislikeContainer,
+							!isPositive ? styles.activeIcon : null,
+						]}
+						onPress={() => setIsPositive(false)}
+					>
+						<Ionicons
+							name="thumbs-down"
+							size={24}
+							color={!isPositive ? "red" : "#555"}
+						/>
+						<Text style={isPositive ? styles.dislikeText : styles.activeText}>
+							{likesNumber.dislikes}
+						</Text>
+					</TouchableOpacity>
+				</View>
 			</View>
 			<View style={styles.ratingsListContainer}>
 				{ratedAds?.map(ad => (
@@ -123,44 +102,23 @@ const styles = StyleSheet.create({
 		padding: 20,
 	},
 	userInfo: {
-		marginTop: 20,
-		borderColor: "gray",
 		backgroundColor: "#fff",
-		borderWidth: 1,
 		borderRadius: 5,
-		padding: 16,
-		marginBottom: 10,
+		padding: 20,
+		marginBottom: 20,
 	},
 	username: {
-		fontSize: 20,
+		fontSize: 24,
 		fontWeight: "bold",
 		marginBottom: 10,
-	},
-	userInfoItem: {
-		flexDirection: "row",
-		alignItems: "center",
-		marginBottom: 10,
-	},
-	userInfoIcon: {
-		marginRight: 10,
-		color: "gray",
 	},
 	userPhone: {
-		fontSize: 16,
-		color: "gray",
-	},
-	userEmail: {
-		fontSize: 16,
-		color: "gray",
+		fontSize: 18,
+		marginBottom: 5,
 	},
 	userCity: {
-		fontSize: 16,
-		color: "gray",
-	},
-	rateButtonText: {
-		fontSize: 16,
-		color: "white",
-		fontWeight: "bold",
+		fontSize: 18,
+		marginBottom: 10,
 	},
 	rateButton: {
 		backgroundColor: COLORS.blue,
@@ -174,8 +132,8 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 	},
 	ratingContainer: {
-		flexDirection: "row",
-		justifyContent: "space-around",
+		flexDirection: "column",
+		justifyContent: "space-between",
 		alignItems: "center",
 		backgroundColor: "#fff",
 		borderRadius: 5,
@@ -185,6 +143,7 @@ const styles = StyleSheet.create({
 	likeContainer: {
 		flexDirection: "row",
 		alignItems: "center",
+		marginRight: 80,
 	},
 	likeText: {
 		fontSize: 18,
@@ -221,5 +180,21 @@ const styles = StyleSheet.create({
 		color: "#fff",
 		fontSize: 18,
 		marginLeft: 5,
+	},
+	textContainer: {
+		alignItems: "center", // Center the text horizontally
+	},
+	textAboveButtons: {
+		fontSize: 18,
+		fontWeight: "bold",
+	},
+	buttonsContainer: {
+		flexDirection: "row",
+		justifyContent: "space-between",
+		alignItems: "center",
+		// backgroundColor: "#fff",
+		// borderRadius: 5,
+		// padding: 20,
+		marginTop: 20,
 	},
 });

@@ -5,6 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import AuthForm from "./AuthForm";
 import { COLORS } from "../constants";
 import Button from "./Button";
+import { ScrollView } from "react-native-gesture-handler";
 function AuthContent({ isLogin, onAuthenticate }) {
 	const navigation = useNavigation();
 
@@ -71,18 +72,20 @@ function AuthContent({ isLogin, onAuthenticate }) {
 	}
 
 	return (
-		<View style={styles.authContent}>
-			<AuthForm
-				isLogin={isLogin}
-				onSubmit={submitHandler}
-				credentialsInvalid={credentialsInvalid}
-			/>
-			<View style={styles.buttons}>
-				<Button onPress={switchAuthModeHandler}>
-					{isLogin ? "Sign up" : "Log in"}
-				</Button>
+		<ScrollView>
+			<View style={styles.authContent}>
+				<AuthForm
+					isLogin={isLogin}
+					onSubmit={submitHandler}
+					credentialsInvalid={credentialsInvalid}
+				/>
+				<View style={styles.buttons}>
+					<Button onPress={switchAuthModeHandler}>
+						{isLogin ? "Sign up" : "Log in"}
+					</Button>
+				</View>
 			</View>
-		</View>
+		</ScrollView>
 	);
 }
 
@@ -90,7 +93,7 @@ export default AuthContent;
 
 const styles = StyleSheet.create({
 	authContent: {
-		marginTop: 32,
+		marginTop: 80,
 		marginHorizontal: 32,
 		padding: 16,
 		borderRadius: 8,

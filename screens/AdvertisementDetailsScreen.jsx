@@ -23,7 +23,7 @@ const AdvertisementDetailsScreen = () => {
 	const ad = route.params.ad;
 
 	const handleNavigateToRatings = () => {
-		navigation.navigate("UserRatings", {
+		navigation.navigate("User Ratings", {
 			user: ad.user,
 			numOfLikes: numberOfLikesAndDislikes,
 		});
@@ -52,20 +52,25 @@ const AdvertisementDetailsScreen = () => {
 				style={styles.image}
 			/>
 			<View style={styles.content}>
-				<Text style={styles.title}>{ad.title}</Text>
+				<View style={styles.dateTitle}>
+					<Text style={styles.title}>{ad.title}</Text>
+					{/* <View style={styles.date}>
+						<Ionicons name="time" size={20} color="#555" />
+						<Text style={styles.dateText}>
+							{ad.creationDate.toLocaleString("ar-AE")}
+						</Text>
+					</View> */}
+				</View>
 				<View style={styles.details}>
 					<Text style={styles.category}>
 						Category: {ad.advertisementCategory}
 					</Text>
-					<Text style={styles.price}>{`${ad.price.toLocaleString()} din`}</Text>
 				</View>
+				<View style={styles.priceContainer}>
+					<Text style={styles.price}>{`${ad.price.toLocaleString()} $`}</Text>
+				</View>
+
 				<Text style={styles.description}>{ad.description}</Text>
-				<View style={styles.date}>
-					<Ionicons name="time" size={20} color="#555" />
-					<Text style={styles.dateText}>
-						Created on {ad.creationDate.toLocaleString("ar-AE")}
-					</Text>
-				</View>
 
 				<View style={styles.userInfoContainer}>
 					<Text style={styles.userInfoTitle}>Seller Information</Text>
@@ -150,15 +155,18 @@ export default AdvertisementDetailsScreen;
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: "#fff",
+		backgroundColor: "white",
+	},
+	dateTitle: {
+		flexDirection: "row",
+		justifyContent: "space-between",
 	},
 	image: {
 		width: "100%",
-		height: 300,
-		resizeMode: "cover",
+		height: 250,
 	},
 	content: {
-		padding: 20,
+		padding: 16,
 	},
 	title: {
 		fontSize: 24,
@@ -167,40 +175,38 @@ const styles = StyleSheet.create({
 	},
 	details: {
 		flexDirection: "row",
-		alignItems: "center",
+		justifyContent: "space-between",
 		marginBottom: 10,
 	},
 	category: {
 		fontSize: 16,
-		fontWeight: "bold",
-		marginRight: 10,
-		color: "#555",
+		color: "gray",
 	},
 	price: {
 		fontSize: 16,
 		fontWeight: "bold",
-		color: "#f88c00",
+		color: "white",
 	},
 	description: {
 		fontSize: 16,
-		lineHeight: 24,
-		marginBottom: 20,
+		color: "gray",
+		marginTop: 8,
 	},
 	date: {
 		flexDirection: "row",
 		alignItems: "center",
-		marginBottom: 20,
 	},
 	dateText: {
+		marginLeft: 5,
 		fontSize: 16,
-		marginLeft: 10,
-		color: "#555",
+		color: "gray",
 	},
 	userInfoContainer: {
-		backgroundColor: "#fff",
-		marginTop: 10,
-		// padding: 10,
-		borderRadius: 10,
+		marginTop: 20,
+		borderColor: "gray",
+		borderWidth: 1,
+		borderRadius: 5,
+		padding: 16,
 	},
 	userInfoTitle: {
 		fontSize: 20,
@@ -208,8 +214,7 @@ const styles = StyleSheet.create({
 		marginBottom: 10,
 	},
 	userInfoContent: {
-		flexDirection: "column",
-		alignItems: "stretch",
+		marginTop: 10,
 	},
 	userInfoItem: {
 		flexDirection: "row",
@@ -221,7 +226,7 @@ const styles = StyleSheet.create({
 	},
 	userInfoText: {
 		fontSize: 16,
-		color: "#555",
+		color: "gray",
 	},
 	likesContainer: {
 		flexDirection: "row",
@@ -229,7 +234,8 @@ const styles = StyleSheet.create({
 		marginRight: 20,
 	},
 	likesIcon: {
-		marginRight: 10,
+		marginRight: 5,
+		color: "black",
 	},
 	likesText: {
 		fontSize: 16,
@@ -240,18 +246,18 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	dislikesIcon: {
-		marginRight: 10,
+		marginRight: 5,
+		color: "black",
 	},
 	dislikesText: {
 		fontSize: 16,
 		color: "red",
 	},
-	advertisementsLink: {
-		marginTop: 20,
-	},
-	advertisementsLinkText: {
-		fontSize: 16,
-		color: "#0d6efd",
-		textDecorationLine: "underline",
+	priceContainer: {
+		backgroundColor: COLORS.blue,
+		borderRadius: 20,
+		alignSelf: "flex-start",
+		paddingHorizontal: 10,
+		paddingVertical: 5,
 	},
 });

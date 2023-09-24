@@ -25,8 +25,8 @@ const UserRating = ({ rating }) => {
 			</View>
 			<View style={styles.infoContainer}>
 				<Text style={styles.date}>{rating.date}</Text>
-				<Text style={styles.title}>{rating.advertisementTitle}</Text>
-				<Text style={styles.desc}>{rating.description}</Text>
+				<Text style={styles.title}>Ad: {rating.advertisementTitle}</Text>
+				<Text style={styles.desc}>Comment: {rating.description}</Text>
 			</View>
 		</View>
 	);
@@ -57,10 +57,11 @@ const styles = StyleSheet.create({
 		alignSelf: "flex-end",
 	},
 	title: {
-		fontSize: 14,
+		fontSize: 16,
+		marginBottom: 10,
 	},
 	desc: {
-		fontSize: 20,
+		fontSize: 14,
 	},
 	icon: {
 		alignSelf: "center",

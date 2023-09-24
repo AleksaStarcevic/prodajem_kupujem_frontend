@@ -9,6 +9,8 @@ import {
 	Platform,
 	Alert,
 	ToastAndroid,
+	KeyboardAvoidingView,
+	SafeAreaView,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { Picker } from "@react-native-picker/picker";
@@ -17,6 +19,7 @@ import { AuthContext } from "../context/auth_context";
 import axios from "axios";
 import { COLORS } from "../constants";
 import { baseUrl, getApiOptions } from "../config/apiConfig";
+import { ScrollView } from "react-native-gesture-handler";
 
 const AddAdvertisementScreen = () => {
 	const [title, setTitle] = useState("");
@@ -108,7 +111,7 @@ const AddAdvertisementScreen = () => {
 	}, []);
 
 	return (
-		<View style={styles.container}>
+		<ScrollView style={styles.container}>
 			<View style={styles.formContainer}>
 				<TextInput
 					style={styles.input}
@@ -117,7 +120,7 @@ const AddAdvertisementScreen = () => {
 					onChangeText={text => setTitle(text)}
 				/>
 				<TextInput
-					style={styles.input}
+					style={styles.inputDesc}
 					placeholder="Description"
 					value={description}
 					onChangeText={text => setDescription(text)}
@@ -134,7 +137,11 @@ const AddAdvertisementScreen = () => {
 					onValueChange={handleCategoryChange}
 					style={styles.picker}
 				>
-					<Picker.Item label="Select category" value="" />
+					<Picker.Item
+						label="Select category"
+						value=""
+						style={styles.pickerItem}
+					/>
 					{adsCategories.map(category => (
 						<Picker.Item
 							key={category.id}
@@ -143,6 +150,7 @@ const AddAdvertisementScreen = () => {
 						/>
 					))}
 				</Picker>
+
 				{!image && (
 					<View style={styles.cameraButtonsContainer}>
 						<TouchableOpacity
@@ -159,14 +167,6 @@ const AddAdvertisementScreen = () => {
 						</TouchableOpacity>
 					</View>
 				)}
-				{/* {!image && (
-					<TouchableOpacity
-						style={styles.imageButton}
-						onPress={handlePickImage}
-					>
-						<Text style={styles.imageButtonText}>Choose Image</Text>
-					</TouchableOpacity>
-				)} */}
 				{image && (
 					<Image
 						source={{ uri: `data:image/png;base64,${image}` }}
@@ -177,7 +177,7 @@ const AddAdvertisementScreen = () => {
 					<Text style={styles.submitButtonText}>Add Advertisement</Text>
 				</TouchableOpacity>
 			</View>
-		</View>
+		</ScrollView>
 	);
 };
 
@@ -188,8 +188,6 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: "#f5f5f5",
 		paddingHorizontal: 30,
-		paddingTop: 60,
-		paddingBottom: 20,
 	},
 	title: {
 		fontSize: 24,
@@ -201,10 +199,22 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: "center",
 		alignItems: "center",
+		marginTop: 50,
 	},
 	input: {
 		width: "100%",
 		height: 50,
+		borderColor: "#bbb",
+		borderWidth: 1,
+		borderRadius: 10,
+		paddingHorizontal: 15,
+		marginBottom: 20,
+		fontSize: 16,
+		color: "#444",
+	},
+	inputDesc: {
+		width: "100%",
+		height: 90,
 		borderColor: "#bbb",
 		borderWidth: 1,
 		borderRadius: 10,
@@ -245,11 +255,12 @@ const styles = StyleSheet.create({
 		borderRadius: 10,
 	},
 	submitButton: {
-		backgroundColor: COLORS.tertiary,
+		backgroundColor: COLORS.primary,
 		paddingVertical: 15,
 		paddingHorizontal: 20,
 		borderRadius: 10,
 		marginTop: 20,
+		width: "95%",
 	},
 	submitButtonText: {
 		color: "#fff",
@@ -264,7 +275,7 @@ const styles = StyleSheet.create({
 		marginTop: 20,
 	},
 	cameraButton: {
-		backgroundColor: COLORS.tertiary,
+		backgroundColor: COLORS.primary,
 		paddingVertical: 15,
 		paddingHorizontal: 20,
 		borderRadius: 10,
