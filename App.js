@@ -25,9 +25,16 @@ import MyFollowingsScreen from "./screens/MyFollowingsScreen";
 import MyRatingsScreen from "./screens/MyRatingsScreen";
 import LogoutScreen from "./screens/LogoutScreen";
 import EditProfileScreen from "./screens/EditProfileScreen";
+import { ToastProvider } from "react-native-toast-notifications";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
+
+import { AppRegistry, LogBox } from "react-native";
+
+LogBox.ignoreAllLogs();
+
+AppRegistry.registerComponent("MyApp", () => App);
 
 function DrawerNavigator() {
 	const authCtx = useContext(AuthContext);
@@ -182,7 +189,9 @@ export default function App() {
 			<StatusBar style="auto" />
 			<AuthContextProvider>
 				<FavoritesProvider>
-					<Navigation />
+					<ToastProvider>
+						<Navigation />
+					</ToastProvider>
 				</FavoritesProvider>
 			</AuthContextProvider>
 		</>

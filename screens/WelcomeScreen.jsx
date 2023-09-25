@@ -1,4 +1,4 @@
-import { React, useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
 	View,
 	Text,
@@ -16,6 +16,7 @@ import Advertisement from "../components/Advertisement";
 import { AuthContext } from "../context/auth_context";
 import { useNavigation } from "@react-navigation/native";
 import { baseUrl, getApiOptions } from "../config/apiConfig";
+import { useFocusEffect } from "@react-navigation/native";
 
 const WelcomeScreen = () => {
 	const [activeJobType, setActiveJobType] = useState({
@@ -35,20 +36,23 @@ const WelcomeScreen = () => {
 		navigation.navigate("Search", { searchTerm });
 	};
 
-	useEffect(() => {
-		const fetchAds = async () => {
-			let options2 = getApiOptions(authCtx.token, "GET", false);
-			options2.url = `${baseUrl}/advertisements/category/${activeJobType.categoryName}/search`;
-			try {
-				const response = await axios.request(options2);
-				setAdsData(response.data);
-			} catch (error) {
-				alert("Error!");
-			}
-		};
+	useFocusEffect(
+		React.useCallback(() => {
+			const fetchAds = async () => {
+				let options2 = getApiOptions(authCtx.token, "GET", false);
+				options2.url = `${baseUrl}/advertisements/category/${activeJobType.categoryName}/search`;
+				try {
+					const response = await axios.request(options2);
+					setAdsData(response.data);
+				} catch (error) {
+					alert("Error!");
+				}
+			};
 
-		fetchAds();
-	}, [activeJobType]);
+			fetchAds();
+		}, [activeJobType])
+	);
+
 	return (
 		<ScrollView showsVerticalScrollIndicator={false}>
 			<View

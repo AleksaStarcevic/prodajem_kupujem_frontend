@@ -8,7 +8,6 @@ import {
 	Image,
 	Platform,
 	Alert,
-	ToastAndroid,
 	KeyboardAvoidingView,
 	SafeAreaView,
 } from "react-native";
@@ -20,6 +19,7 @@ import axios from "axios";
 import { COLORS } from "../constants";
 import { baseUrl, getApiOptions } from "../config/apiConfig";
 import { ScrollView } from "react-native-gesture-handler";
+import { useToast } from "react-native-toast-notifications";
 
 const AddAdvertisementScreen = () => {
 	const [title, setTitle] = useState("");
@@ -30,6 +30,7 @@ const AddAdvertisementScreen = () => {
 	const [adsCategories, setAdsCategories] = useState([]);
 	const [selectedCategory, setSelectedCategory] = useState({});
 	const authCtx = useContext(AuthContext);
+	const toast = useToast();
 	const handleSubmit = async () => {
 		let options = getApiOptions(authCtx.token, "POST", {
 			title: title,
@@ -42,10 +43,9 @@ const AddAdvertisementScreen = () => {
 		options.url = `${baseUrl}/advertisements/`;
 		try {
 			const response = await axios(options);
-			ToastAndroid.show(
-				"Your advertisement has been added.",
-				ToastAndroid.SHORT
-			);
+			toast.show("Your advertisement has been added.", {
+				type: "success",
+			});
 			setImage(null);
 			setTitle("");
 			setDescription("");
@@ -53,7 +53,9 @@ const AddAdvertisementScreen = () => {
 			setCategory("");
 		} catch (error) {
 			console.error(error.response.data);
-			ToastAndroid.show(`Error, ${error.response.data}`, ToastAndroid.SHORT);
+			toast.show(`Error, ${error.response.data}`, {
+				type: "danger",
+			});
 		}
 	};
 
@@ -139,7 +141,7 @@ const AddAdvertisementScreen = () => {
 				>
 					<Picker.Item
 						label="Select category"
-						value=""
+						value="Unnamed"
 						style={styles.pickerItem}
 					/>
 					{adsCategories.map(category => (

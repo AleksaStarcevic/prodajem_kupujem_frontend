@@ -7,32 +7,51 @@ import axios from "axios";
 import UserRating from "../components/UserRating";
 import { AuthContext } from "../context/auth_context";
 import { baseUrl, getApiOptions } from "../config/apiConfig";
+import { useFocusEffect } from "@react-navigation/native";
+
 const UserRatingsScreen = () => {
 	const route = useRoute();
 	const navigation = useNavigation();
 	const user = route.params.user;
-	const numOfLikes = route.params.numOfLikes;
+	const [numberOfLikesAndDislikes, setnumberOfLikesAndDislikes] = useState({});
 	const [ratedAds, setRatedAds] = useState([]);
 	const [isPositive, setIsPositive] = useState(true);
 	const authCtx = useContext(AuthContext);
-	useEffect(() => {
-		const fetchRatedAds = async () => {
-			const search = isPositive ? "positive" : "negative";
-			let options = getApiOptions(authCtx.token, "GET", false);
-			options.url = `${baseUrl}/user/${parseInt(
-				user.id
-			)}/ratedAdvertisements?rate=${search}`;
-			try {
-				const response = await axios.request(options);
-				setRatedAds(response.data);
-			} catch (error) {
-				alert("Error!");
-				console.log(error);
-			}
-		};
 
-		fetchRatedAds();
-	}, [isPositive]);
+	useFocusEffect(
+		React.useCallback(() => {
+			const fetchRatedAds = async () => {
+				const search = isPositive ? "positive" : "negative";
+				let options = getApiOptions(authCtx.token, "GET", false);
+				options.url = `${baseUrl}/user/${parseInt(
+					user.id
+				)}/ratedAdvertisements?rate=${search}`;
+				try {
+					const response = await axios.request(options);
+					setRatedAds(response.data);
+				} catch (error) {
+					alert("Error!");
+					console.log(error);
+				}
+			};
+
+			const fetchLikeAndDislikeNumbers = async () => {
+				let options = getApiOptions(authCtx.token, "GET", false);
+				options.url = `${baseUrl}/user/${parseInt(user.id)}/likesNumber`;
+				try {
+					const response = await axios.request(options);
+					setnumberOfLikesAndDislikes(response.data);
+				} catch (error) {
+					alert("Error!");
+					console.log(error);
+				}
+			};
+
+			fetchRatedAds();
+			fetchLikeAndDislikeNumbers();
+		}, [isPositive])
+	);
+
 	console.log(user);
 	console.log(authCtx.email);
 	return (
@@ -86,7 +105,7 @@ const UserRatingsScreen = () => {
 						color={isPositive ? "green" : "#555"}
 					/>
 					<Text style={isPositive ? styles.activeText : styles.likeText}>
-						{numOfLikes.likes}
+						{numberOfLikesAndDislikes.likes}
 					</Text>
 				</TouchableOpacity>
 				<TouchableOpacity
@@ -102,7 +121,7 @@ const UserRatingsScreen = () => {
 						color={!isPositive ? "red" : "#555"}
 					/>
 					<Text style={isPositive ? styles.dislikeText : styles.activeText}>
-						{numOfLikes.dislikes}
+						{numberOfLikesAndDislikes.dislikes}
 					</Text>
 				</TouchableOpacity>
 			</View>

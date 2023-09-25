@@ -1,4 +1,4 @@
-import { React, useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
 	View,
 	StyleSheet,
@@ -11,6 +11,8 @@ import axios from "axios";
 import Advertisement from "../components/Advertisement";
 import { AuthContext } from "../context/auth_context";
 import { baseUrl, getApiOptions } from "../config/apiConfig";
+import { useFocusEffect } from "@react-navigation/native";
+
 const MyAdvertisementsScreen = () => {
 	const [adsData, setAdsData] = useState([]);
 	const [childChange, setChildChange] = useState(false);
@@ -23,23 +25,25 @@ const MyAdvertisementsScreen = () => {
 		setChildChange(prev => !prev);
 	};
 
-	useEffect(() => {
-		console.log("aa");
-		const fetchAds = async () => {
-			let options = getApiOptions(authCtx.token, "GET", false);
-			options.url = `${baseUrl}/my_account/advertisements?status=${status}`;
-			try {
-				console.log(options.url);
-				const response = await axios.request(options);
-				setAdsData(response.data);
-			} catch (error) {
-				alert("Error!");
-				console.log(error);
-			}
-		};
+	useFocusEffect(
+		React.useCallback(() => {
+			const fetchAds = async () => {
+				let options = getApiOptions(authCtx.token, "GET", false);
+				options.url = `${baseUrl}/my_account/advertisements?status=${status}`;
+				try {
+					console.log(options.url);
+					const response = await axios.request(options);
+					setAdsData(response.data);
+				} catch (error) {
+					alert("Error!");
+					console.log(error);
+				}
+			};
 
-		fetchAds();
-	}, [childChange, selectedTab]);
+			fetchAds();
+		}, [childChange, selectedTab])
+	);
+
 	return (
 		<ScrollView showsVerticalScrollIndicator={false}>
 			<View style={styles.tabsContainer}>

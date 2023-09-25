@@ -6,7 +6,6 @@ import {
 	TouchableOpacity,
 	Image,
 	StyleSheet,
-	ToastAndroid,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRoute } from "@react-navigation/native";
@@ -15,6 +14,7 @@ import axios from "axios";
 import { COLORS, SHADOWS, SIZES } from "../constants";
 import { AuthContext } from "../context/auth_context";
 import { baseUrl, getApiOptions } from "../config/apiConfig";
+import { useToast } from "react-native-toast-notifications";
 
 const RateScreen = () => {
 	const [isPositive, setIsPositive] = useState(true);
@@ -28,6 +28,7 @@ const RateScreen = () => {
 	const handlePositivePress = () => {
 		setIsPositive(true);
 	};
+	const toast = useToast();
 
 	const handleNegativePress = () => {
 		setIsPositive(false);
@@ -49,10 +50,13 @@ const RateScreen = () => {
 		)}/advertisements/${parseInt(selectedAd.id)}/rating`;
 		try {
 			const response = await axios.request(options);
-			ToastAndroid.show(`Successfully rated user`, ToastAndroid.SHORT);
+			toast.show("Successfully rated user", {
+				type: "success",
+			});
 		} catch (error) {
-			ToastAndroid.show(`Error, ${error.response.data}`, ToastAndroid.SHORT);
-			console.log(error.response.data);
+			toast.show(`Error, ${error.response.data}`, {
+				type: "danger",
+			});
 		}
 	};
 
@@ -64,10 +68,9 @@ const RateScreen = () => {
 				const response = await axios.request(options);
 				setUserAdvertisements(response.data);
 			} catch (error) {
-				ToastAndroid.show(
-					error.response ? error.response : "Error",
-					ToastAndroid.SHORT
-				);
+				toast.show(error.response ? error.response : "Error", {
+					type: "danger",
+				});
 			}
 		};
 
@@ -86,7 +89,7 @@ const RateScreen = () => {
 						selectedValue={selectedTitle}
 						onValueChange={handleTitleChange}
 					>
-						<Picker.Item label="Select advertisement" value="" />
+						<Picker.Item label="Select advertisement" value="Unamed" />
 						{userAdvertisements.map(ad => (
 							<Picker.Item key={ad.id} label={ad.title} value={ad.title} />
 						))}
@@ -95,6 +98,15 @@ const RateScreen = () => {
 			</View>
 
 			<View style={styles.formContainer}>
+				<Text style={styles.label}>Your Feedback</Text>
+				<TextInput
+					style={styles.textInput}
+					placeholder="Type your feedback here"
+					multiline
+					numberOfLines={4}
+					onChangeText={newText => setFeedback(newText)}
+					value={feedBack}
+				/>
 				<Text style={styles.label}>Your Rating</Text>
 				<View style={styles.ratingContainer}>
 					<TouchableOpacity
@@ -118,16 +130,6 @@ const RateScreen = () => {
 						/>
 					</TouchableOpacity>
 				</View>
-
-				<Text style={styles.label}>Your Feedback</Text>
-				<TextInput
-					style={styles.textInput}
-					placeholder="Type your feedback here"
-					multiline
-					numberOfLines={4}
-					onChangeText={newText => setFeedback(newText)}
-					value={feedBack}
-				/>
 
 				<TouchableOpacity
 					style={styles.submitButton}

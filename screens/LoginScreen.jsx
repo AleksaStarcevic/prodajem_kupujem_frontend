@@ -1,14 +1,16 @@
-import { StyleSheet, Text, View, ToastAndroid } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import React, { useState, useContext } from "react";
 import AuthContent from "../components/AuthContent";
 import LoadingOverlay from "../components/LoadingOverlay";
 import axios from "axios";
 import { AuthContext } from "../context/auth_context";
 import { baseUrlLogin, getApiOptions } from "../config/apiConfig";
+import { useToast } from "react-native-toast-notifications";
 
 const LoginScreen = () => {
 	const [isAuthethicating, setIsAuthethicating] = useState(false);
 	const authCtx = useContext(AuthContext);
+	const toast = useToast();
 
 	const loginHandler = async userObject => {
 		const userLogin = {
@@ -30,13 +32,17 @@ const LoginScreen = () => {
 			const response = await axios.request(options);
 			authCtx.authenticate(response.data.access_token, response.data.email);
 			setIsAuthethicating(false);
-			ToastAndroid.show("Login successfull!", ToastAndroid.SHORT);
+			toast.show("Login successfull!", {
+				type: "success",
+			});
 		} catch (error) {
-			ToastAndroid.show(
+			toast.show(
 				error.response.data
 					? error.response.data
 					: "Error, check your credentials",
-				ToastAndroid.SHORT
+				{
+					type: "danger",
+				}
 			);
 			setIsAuthethicating(false);
 		}

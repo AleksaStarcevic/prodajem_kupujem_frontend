@@ -1,12 +1,14 @@
-import { StyleSheet, Text, View, ToastAndroid } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import React, { useContext, useState } from "react";
 import AuthContent from "../components/AuthContent";
 import LoadingOverlay from "../components/LoadingOverlay";
 import axios from "axios";
 import { baseUrl, getApiOptions } from "../config/apiConfig";
+import { useToast } from "react-native-toast-notifications";
 
 const SignupScreen = () => {
 	const [isAuthethicating, setIsAuthethicating] = useState(false);
+	const toast = useToast();
 
 	const signUpHandler = async userObject => {
 		setIsAuthethicating(true);
@@ -16,12 +18,13 @@ const SignupScreen = () => {
 		try {
 			const response = await axios.request(options);
 			setIsAuthethicating(false);
-			ToastAndroid.show(
-				"Registered successfully, check your email!",
-				ToastAndroid.SHORT
-			);
+			toast.show("Registered successfully, check your email!", {
+				type: "success",
+			});
 		} catch (error) {
-			ToastAndroid.show(error.response?.data, ToastAndroid.SHORT);
+			toast.show(`Error, ${error.response.data}`, {
+				type: "danger",
+			});
 			setIsAuthethicating(false);
 		}
 	};

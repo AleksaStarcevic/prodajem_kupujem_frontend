@@ -14,6 +14,7 @@ import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import { AuthContext } from "../context/auth_context";
 import { baseUrl, getApiOptions } from "../config/apiConfig";
+import { useFocusEffect } from "@react-navigation/native";
 
 const AdvertisementDetailsScreen = () => {
 	const route = useRoute();
@@ -29,21 +30,23 @@ const AdvertisementDetailsScreen = () => {
 		});
 	};
 
-	useEffect(() => {
-		const fetchLikeAndDislikeNumbers = async () => {
-			let options = getApiOptions(authCtx.token, "GET", false);
-			options.url = `${baseUrl}/user/${parseInt(ad.user.id)}/likesNumber`;
-			try {
-				const response = await axios.request(options);
-				setnumberOfLikesAndDislikes(response.data);
-			} catch (error) {
-				alert("Error!");
-				console.log(error);
-			}
-		};
+	useFocusEffect(
+		React.useCallback(() => {
+			const fetchLikeAndDislikeNumbers = async () => {
+				let options = getApiOptions(authCtx.token, "GET", false);
+				options.url = `${baseUrl}/user/${parseInt(ad.user.id)}/likesNumber`;
+				try {
+					const response = await axios.request(options);
+					setnumberOfLikesAndDislikes(response.data);
+				} catch (error) {
+					alert("Error!");
+					console.log(error);
+				}
+			};
 
-		fetchLikeAndDislikeNumbers();
-	}, []);
+			fetchLikeAndDislikeNumbers();
+		}, [])
+	);
 
 	return (
 		<ScrollView style={styles.container}>

@@ -6,13 +6,13 @@ import {
 	TextInput,
 	TouchableOpacity,
 	StyleSheet,
-	ToastAndroid,
 	Keyboard,
 } from "react-native";
 import { baseUrl, getApiOptions } from "../config/apiConfig";
 import { AuthContext } from "../context/auth_context";
 import axios from "axios";
 import { COLORS } from "../constants";
+import { useToast } from "react-native-toast-notifications";
 
 const EditProfileScreen = () => {
 	const [userData, setUserData] = useState({
@@ -21,6 +21,7 @@ const EditProfileScreen = () => {
 		city: "",
 	});
 	const authCtx = useContext(AuthContext);
+	const toast = useToast();
 
 	useEffect(() => {
 		const fetchUserInfo = async () => {
@@ -60,7 +61,9 @@ const EditProfileScreen = () => {
 		try {
 			const response = await axios.request(options);
 			setUserData(response.data);
-			ToastAndroid.show("Profile changed successfully!", ToastAndroid.SHORT);
+			toast.show("Profile changed successfully!", {
+				type: "success",
+			});
 		} catch (error) {
 			alert("Error!");
 		}
