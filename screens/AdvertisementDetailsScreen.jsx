@@ -27,6 +27,7 @@ const AdvertisementDetailsScreen = () => {
 		navigation.navigate("User Ratings", {
 			user: ad.user,
 			numOfLikes: numberOfLikesAndDislikes,
+			adId: ad.id,
 		});
 	};
 

@@ -13,6 +13,7 @@ const UserRatingsScreen = () => {
 	const route = useRoute();
 	const navigation = useNavigation();
 	const user = route.params.user;
+	const adId = route.params.adId;
 	const [numberOfLikesAndDislikes, setnumberOfLikesAndDislikes] = useState({});
 	const [ratedAds, setRatedAds] = useState([]);
 	const [isPositive, setIsPositive] = useState(true);
@@ -88,7 +89,7 @@ const UserRatingsScreen = () => {
 				{user.email !== authCtx.email && (
 					<TouchableOpacity
 						style={styles.rateButton}
-						onPress={() => navigation.navigate("Rate User", { user })}
+						onPress={() => navigation.navigate("Rate User", { user, adId })}
 					>
 						<Text style={styles.rateButtonText}>Rate User</Text>
 					</TouchableOpacity>

@@ -20,9 +20,8 @@ const RateScreen = () => {
 	const [isPositive, setIsPositive] = useState(true);
 	const route = useRoute();
 	const user = route.params.user;
+	const adId = route.params.adId;
 	const [userAdvertisements, setUserAdvertisements] = useState([]);
-	const [selectedTitle, setSelectedTitle] = useState("");
-	const [selectedAd, setSelectedAd] = useState({});
 	const [feedBack, setFeedback] = useState("");
 	const authCtx = useContext(AuthContext);
 	const handlePositivePress = () => {
@@ -34,12 +33,6 @@ const RateScreen = () => {
 		setIsPositive(false);
 	};
 
-	const handleTitleChange = (title, index) => {
-		const selectedAd = userAdvertisements[index - 1];
-		setSelectedTitle(title);
-		setSelectedAd({ id: selectedAd.id, title: selectedAd.title });
-	};
-
 	const handleFormSubmit = async () => {
 		let options = getApiOptions(authCtx.token, "POST", {
 			description: feedBack,
@@ -47,7 +40,7 @@ const RateScreen = () => {
 		});
 		options.url = `${baseUrl}/user/${parseInt(
 			user.id
-		)}/advertisements/${parseInt(selectedAd.id)}/rating`;
+		)}/advertisements/${parseInt(adId)}/rating`;
 		try {
 			const response = await axios.request(options);
 			toast.show("Successfully rated user", {
@@ -84,16 +77,6 @@ const RateScreen = () => {
 			<View style={styles.userContainer}>
 				<View style={styles.userInfo}>
 					<Text style={styles.username}>Rating for user: {user.name}</Text>
-					<Picker
-						style={styles.titlePicker}
-						selectedValue={selectedTitle}
-						onValueChange={handleTitleChange}
-					>
-						<Picker.Item label="Select advertisement" value="Unamed" />
-						{userAdvertisements.map(ad => (
-							<Picker.Item key={ad.id} label={ad.title} value={ad.title} />
-						))}
-					</Picker>
 				</View>
 			</View>
 

@@ -20,17 +20,20 @@ import { COLORS } from "../constants";
 import { baseUrl, getApiOptions } from "../config/apiConfig";
 import { ScrollView } from "react-native-gesture-handler";
 import { useToast } from "react-native-toast-notifications";
+import DropDownPicker from "react-native-dropdown-picker";
 
 const AddAdvertisementScreen = () => {
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
 	const [price, setPrice] = useState("");
-	const [category, setCategory] = useState("");
+	const [category, setCategory] = useState("Laptops");
 	const [image, setImage] = useState(null);
 	const [adsCategories, setAdsCategories] = useState([]);
 	const [selectedCategory, setSelectedCategory] = useState({});
 	const authCtx = useContext(AuthContext);
 	const toast = useToast();
+	const [open, setOpen] = useState(false);
+
 	const handleSubmit = async () => {
 		let options = getApiOptions(authCtx.token, "POST", {
 			title: title,
@@ -57,15 +60,6 @@ const AddAdvertisementScreen = () => {
 				type: "danger",
 			});
 		}
-	};
-
-	const handleCategoryChange = (category, index) => {
-		const selectedCat = adsCategories[index - 1];
-		setCategory(category);
-		setSelectedCategory({
-			id: selectedCat.id,
-			categoryName: selectedCat.categoryName,
-		});
 	};
 
 	const handleTakePicture = async () => {
@@ -134,24 +128,35 @@ const AddAdvertisementScreen = () => {
 					keyboardType="numeric"
 					onChangeText={text => setPrice(text)}
 				/>
-				<Picker
-					selectedValue={category}
-					onValueChange={handleCategoryChange}
-					style={styles.picker}
-				>
-					<Picker.Item
-						label="Select category"
-						value="Unnamed"
-						style={styles.pickerItem}
-					/>
-					{adsCategories.map(category => (
-						<Picker.Item
-							key={category.id}
-							label={category.categoryName}
-							value={category.categoryName}
-						/>
-					))}
-				</Picker>
+				<DropDownPicker
+					open={open}
+					value={category}
+					setOpen={setOpen}
+					setValue={setCategory}
+					items={adsCategories.map(category => ({
+						label: category.categoryName,
+						value: category.categoryName,
+						id: category.id,
+					}))}
+					containerStyle={{
+						height: 70,
+						backgroundColor: COLORS.gray3,
+						zIndex: 9999,
+					}}
+					style={{ backgroundColor: COLORS.gray3, borderColor: "#bbb" }}
+					itemStyle={{
+						justifyContent: "flex-start",
+						backgroundColor: COLORS.gray3,
+					}}
+					onChangeValue={value => {
+						const selectedCategory = adsCategories.find(
+							category => category.categoryName === value
+						);
+						if (selectedCategory) {
+							setSelectedCategory(selectedCategory);
+						}
+					}}
+				/>
 
 				{!image && (
 					<View style={styles.cameraButtonsContainer}>
